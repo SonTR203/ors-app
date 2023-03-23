@@ -15,7 +15,8 @@ import DobDatePicker from './DatePicker';
 import GenderDropDown from './GenderDropDown';
 import LocationDropDown from './LocationDropDown';
 import UserGroupsDropDown from './UserGroupsDropDown';
-import UserProfilePicture from './UserProfilePicture';
+import UserProfilePicture from '../ACPEditUserModal/UserProfilePictureEdit';
+// import UserProfilePicture from './UserProfilePicture';
 import TempPasswordField from './TempPasswordField';
 const s3 = new AWS.S3({
 	accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY_ID,
