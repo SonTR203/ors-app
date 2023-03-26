@@ -11,7 +11,6 @@ import Link from 'next/link';
 
 export default function PlayerRow({ player, index }) {
 	const router = useRouter();
-	console.log(player);
 
 	// Reference: Stack Overflow/Roy <https://stackoverflow.com/questions/73598303/calculate-age-in-js-given-the-birth-date-in-dd-mm-yyyy-format>
 	function calculateAge(dob) {
@@ -24,12 +23,12 @@ export default function PlayerRow({ player, index }) {
 	}
 
 	const handleClick = () => {
-		router.push(`/players/${player.Username}`);
+		router.push(`/players/${player.id}`);
 	};
 
 	return (
 		<tr
-			key={player.Username}
+			key={player.id}
 			className="border-b border-brand-neutral-300 hover:cursor-pointer"
 			onClick={handleClick}
 		>
@@ -70,12 +69,12 @@ export default function PlayerRow({ player, index }) {
 			</td>
 			<td className="p-5 font-light">
 				<div className="flex flex-col gap-1">
-					{player.PlayerDivisionStats[0].team}
+					{player.PlayerDivisionStats[0].team ? player.PlayerDivisionStats[0].team : "N/A"}
 				</div>
 			</td>
 			<td className="p-5 font-light">
 				<div className="flex flex-col gap-1">
-					{player.PlayerDivisionStats[0].position}
+					{player.PlayerDivisionStats[0].position ? player.PlayerDivisionStats[0].position : "N/A"}
 				</div>
 			</td>
 		</tr>

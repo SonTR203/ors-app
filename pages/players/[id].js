@@ -5,16 +5,40 @@
  * Verity Stevens <stev0298@algonquinlive.com>
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'flowbite-react';
 import { IconChevronLeft } from '@tabler/icons-react';
 import AWS from 'aws-sdk';
 import Image from 'next/image';
+import { getAllPlayers } from '@/utils/graphql.services';
 
 export default function PlayerProfile() {
 	const router = useRouter();
 	const userId = router.query.id;
+	const [player, setPlayer] = useState([]);
+
+	useEffect(() => {
+		if(!userId) {
+			return
+		}
+
+		fetchPlayers();
+	}, [userId]);
+
+	const fetchPlayers = async () => {
+		const data = await getAllPlayers();
+
+		const reqPlayer = data.filter(function(data){
+			return data.id == userId;
+		})
+		setPlayer(reqPlayer);
+	};
+
+	if (player[0] !== undefined) {
+		console.log(player[0])
+		// console.log(team[0].team_history[0].captains[0])
+	}
 
 	return (
 		<>
@@ -23,7 +47,9 @@ export default function PlayerProfile() {
 				{/* Results */}
 				<div className="flex flex-col w-full h-auto bg-white border border-brand-neutral-300 rounded-md">
 					<div className="flex justify-between py-3 px-5 border-b border-brand-neutral-300">
-						<h1 className="text-lg self-center font-medium">First Last</h1>
+						<h1 className="text-lg self-center font-medium">
+						{player[0] ? player[0].user : " "}
+						</h1>
 						<Button
 							pill={true}
 							className="py-0.5 px-3 bg-blue-900 hover:bg-blue-800"
@@ -56,21 +82,21 @@ export default function PlayerProfile() {
 							<div className="col-span-1 flex flex-col">
 								<h3 className="mb-1 font-light">First Name</h3>
 								<div className="py-2 px-3 border rounded-md border-brand-blue-900/25 font-medium">
-									First Name
+									{player[0] ? player[0].user.split(' ')[0] : " "}
 								</div>
 							</div>
 
 							<div className="col-span-1 flex flex-col">
 								<h3 className="mb-1 font-light">Last Name</h3>
 								<div className="py-2 px-3 border rounded-md border-brand-blue-900/25 font-medium">
-									Family Name
+									{player[0] ? player[0].user.split(' ')[1] : " "}
 								</div>
 							</div>
 
 							<div className="col-span-1 flex flex-col">
 								<h3 className="mb-1 font-light">Location</h3>
 								<div className="py-2 px-3 border rounded-md border-brand-blue-900/25 font-medium">
-									Location
+									{player[0] ? player[0].location : " "}
 								</div>
 							</div>
 
@@ -101,8 +127,8 @@ export default function PlayerProfile() {
 								<tbody>
 									<tr className="font-light">
 										<td className="py-2 px-3">Soccer</td>
-										<td className="py-2 px-3">Team Name</td>
-										<td className="py-2 px-3">Player</td>
+										<td className="py-2 px-3">{player[0] ? player[0].PlayerDivisionStats[0].team : ""}</td>
+										<td className="py-2 px-3">{player[0] ? player[0].PlayerDivisionStats[0].position : " "}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -129,9 +155,9 @@ export default function PlayerProfile() {
 									</thead>
 									<tbody>
 										<tr className="font-light">
-											<td className="py-2 px-3">0</td>
-											<td className="py-2 px-3">0</td>
-											<td className="py-2 px-3">0</td>
+											<td className="py-2 px-3">{player[0] ? player[0].PlayerDivisionStats[0].games_played : " "}</td>
+											<td className="py-2 px-3">{player[0] ? player[0].PlayerDivisionStats[0].goals : " "}</td>
+											<td className="py-2 px-3">{player[0] ? player[0].PlayerDivisionStats[0].assists : " "}</td>
 										</tr>
 									</tbody>
 								</table>
