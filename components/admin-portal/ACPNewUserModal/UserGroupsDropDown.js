@@ -60,7 +60,7 @@ export default function UserGroupsDropDown({ userGroups, setUserGroups }) {
 				<>
 					<div
 						id="dropdown"
-						className="z-[100] absolute bg-white divide-y divide-gray-100 rounded-lg shadow-md w-44  border border-gray-400"
+						className="z-[100] absolute bg-white divide-y divide-gray-100 rounded-lg shadow-md w-44  border border-gray-400 bottom-1"
 					>
 						<ul
 							class="py-2 text-sm text-gray-700 dark:text-gray-200"

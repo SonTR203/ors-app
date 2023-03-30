@@ -17,7 +17,7 @@ import LocationDropDown from './LocationDropDown';
 import UserGroupsDropDown from './UserGroupsDropDown';
 import UserProfilePicture from './UserProfilePicture';
 import TempPasswordField from './TempPasswordField';
-import { createPlayer } from '@/utils/graphql.services';
+import { createPlayer, uploadNewImageToS3 } from '@/utils/graphql.services';
 const s3 = new AWS.S3({
 	accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY_ID,
 	secretAccessKey: process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY,
@@ -235,21 +235,23 @@ export default function ACPNewUserModal({ setOpenModal, setSuccessMessage }) {
 				return;
 			}
 
-			const params = {
-				Bucket: bucketName,
-				Key: newProfilePicId,
-				Body: profilePic,
-				ContentType: profilePic.type,
-			};
-			// Upload the image to S3
-			s3.upload(params, (err, data) => {
-				if (err) {
-					console.log('Error uploading image: ', err);
-				} else {
-					console.log('Image uploaded successfully!');
-					router.reload();
-				}
-			});
+			await uploadNewImageToS3(newProfilePicId, profilePic);
+			router.reload();
+			// const params = {
+			// 	Bucket: bucketName,
+			// 	Key: newProfilePicId,
+			// 	Body: profilePic,
+			// 	ContentType: profilePic.type,
+			// };
+			// // Upload the image to S3
+			// s3.upload(params, (err, data) => {
+			// 	if (err) {
+			// 		console.log('Error uploading image: ', err);
+			// 	} else {
+			// 		console.log('Image uploaded successfully!');
+			// 		router.reload();
+			// 	}
+			// });
 		} catch (error) {
 			console.error(error);
 		}

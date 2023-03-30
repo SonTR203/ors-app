@@ -19,6 +19,7 @@ import UserProfilePictureEdit from './UserProfilePictureEdit';
 // import UserProfilePicture from '../ACPNewUserModal/UserProfilePicture';
 import TempPasswordField from '../ACPNewUserModal/TempPasswordField';
 import ChangePasswordModal from './ChangePasswordModal';
+import { getImageFromS3, uploadNewImageToS3, deleteImageFromS3 } from '@/utils/graphql.services';
 const s3 = new AWS.S3({
 	accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY_ID,
 	secretAccessKey: process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY,
@@ -303,7 +304,7 @@ export default function ACPEditUserModal({
 	};
 
 	const deleteCurrentProfileImageS3 = async () => {
-		const bucketName = 'orsappe5c5a5b29e5b44099d2857189b62061b154029-dev';
+		// const bucketName = 'orsappe5c5a5b29e5b44099d2857189b62061b154029-dev';
 
 		try {
 			if (profilePic === null) {
@@ -312,18 +313,20 @@ export default function ACPEditUserModal({
 				return;
 			}
 
-			const params = {
-				Bucket: bucketName,
-				Key: user.Attributes.find((o) => o.Name === 'picture')['Value'],
-			};
-			s3.deleteObject(params, function (err, data) {
-				if (err) {
-					console.log('Error deleting object: ', err);
-				} else {
-					uploadNewProfileImageToS3();
-					console.log('Object deleted successfully');
-				}
-			});
+			// const params = {
+			// 	Bucket: bucketName,
+			// 	Key: user.Attributes.find((o) => o.Name === 'picture')['Value'],
+			// };
+			await deleteImageFromS3(user.Attributes.find((o) => o.Name === 'picture')['Value']);
+			uploadNewProfileImageToS3();
+			// s3.deleteObject(params, function (err, data) {
+			// 	if (err) {
+			// 		console.log('Error deleting object: ', err);
+			// 	} else {
+			// 		uploadNewProfileImageToS3();
+			// 		console.log('Object deleted successfully');
+			// 	}
+			// });
 		} catch (error) {
 			setMessage({ status: 'error', message: error });
 			console.error(error);
@@ -331,8 +334,8 @@ export default function ACPEditUserModal({
 	};
 
 	const uploadNewProfileImageToS3 = async (newProfilePicId) => {
-		const bucketName = 'orsappe5c5a5b29e5b44099d2857189b62061b154029-dev';
-		const signedUrlExpireSeconds = 60 * 1;
+		// const bucketName = 'orsappe5c5a5b29e5b44099d2857189b62061b154029-dev';
+		// const signedUrlExpireSeconds = 60 * 1;
 
 		try {
 			if (profilePic === null) {
@@ -341,21 +344,24 @@ export default function ACPEditUserModal({
 				return;
 			}
 
-			const params = {
-				Bucket: bucketName,
-				Key: profilePicId,
-				Body: profilePic,
-				ContentType: profilePic.type,
-			};
-			// Upload the image to S3
-			s3.upload(params, (err, data) => {
-				if (err) {
-				} else {
-					console.log('Image uploaded successfully!');
-					setMessage({ status: 'success', message: 'User updated!' });
-					router.reload();
-				}
-			});
+			// const params = {
+			// 	Bucket: bucketName,
+			// 	Key: profilePicId,
+			// 	Body: profilePic,
+			// 	ContentType: profilePic.type,
+			// };
+
+			await uploadNewImageToS3(profilePicId, profilePic);
+			// s3.upload(params, (err, data) => {
+			// 	if (err) {
+			// 	} else {
+			// 		console.log('Image uploaded successfully!');
+			// 		setMessage({ status: 'success', message: 'User updated!' });
+			// 		router.reload();
+			// 	}
+			// });
+			setMessage({ status: 'success', message: 'User updated!' });
+			router.reload();
 		} catch (error) {
 			console.error(error);
 		}
