@@ -50,6 +50,15 @@ export default function UserProfilePictureEdit({
 		}
 	};
 
+	const handleFileChange = (event) => {
+		const file = event.target.files[0];
+		if (file.size > 1024 * 1024) {
+			alert('File is too large!');
+		} else {
+			setProfilePic(file);
+		}
+	}
+
 	return (
 		<div className="w-[12rem] mx-auto">
 			{/* <button onClick={(e) => console.log(grabImage)}>CLick me</button> */}
@@ -59,7 +68,9 @@ export default function UserProfilePictureEdit({
 					id="file"
 					type="file"
 					accept={'image/*'}
-					onChange={(e) => setProfilePic(e.target.files[0])}
+					max
+					onChange={handleFileChange}
+					// onChange={(e) => setProfilePic(e.target.files[0])}
 				/>
 
 				{profilePic === null && (

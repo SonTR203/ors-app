@@ -27,6 +27,16 @@ export default function UserProfilePictureEdit({
 		getPicture();
 	}, []);
 
+	const handleFileChange = (event) => {
+		if (!event.target.files[0]) return;
+		const file = event.target.files[0];
+		if (file.size > 1024 * 1024) {
+			alert('File is too large!');
+		} else {
+			setProfilePic(file);
+		}
+	}
+
 	return (
 		<div className="w-[12rem] mx-auto">
 			<label className="cursor-pointer">
@@ -35,7 +45,8 @@ export default function UserProfilePictureEdit({
 					id="file"
 					type="file"
 					accept={'image/*'}
-					onChange={(e) => setProfilePic(e.target.files[0])}
+					onChange={handleFileChange}
+					// onChange={(e) => setProfilePic(e.target.files[0])}
 				/>
 
 				<img

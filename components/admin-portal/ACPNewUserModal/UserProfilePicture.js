@@ -43,6 +43,15 @@ export default function UserProfilePicture({
 		);
 	};
 
+	const handleFileChange = (event) => {
+		const file = event.target.files[0];
+		if (file.size > 1024 * 1024) {
+			alert('File is too large!');
+		} else {
+			setProfilePic(file);
+		}
+	}
+
 	return (
 		<div className={autoCenter ? 'w-[12rem] mx-auto' : 'w-[12rem'}>
 			{/* <button onClick={(e) => console.log(grabImage)}>CLick me</button> */}
@@ -52,7 +61,8 @@ export default function UserProfilePicture({
 					id="file"
 					type="file"
 					accept={'image/*'}
-					onChange={(e) => setProfilePic(e.target.files[0])}
+					onChange={handleFileChange}
+					// onChange={(e) => setProfilePic(e.target.files[0])}
 				/>
 
 				{/* <img style={{objectFit: 'cover'}} width={132} height={132} className="w-[10rem] h-[10rem] hover:opacity-80 rounded-full shadow-lg border border-black" src={URL.createObjectURL(new File(profilePic, {type: "application/zip"}))} /> */}

@@ -41,6 +41,7 @@ export default function Setting() {
 				if (user.attributes.picture !== 'none') {
 					await deleteImageFromS3(user.attributes.picture);
 				}
+
 				await uploadNewImageToS3(imageKey, profilePic);
 				setMessage({status: 'success', message: 'Profile updated successfully.'})
 				return;
