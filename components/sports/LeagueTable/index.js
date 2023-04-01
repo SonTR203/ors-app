@@ -6,16 +6,60 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { API } from 'aws-amplify';
 import CreateButton from '../CreateButton';
 import LeagueCard from './LeagueCard';
 import CreateLeagueModal from './Modals/CreateLeagueModal';
+import { getLeague } from '@/src/graphql/queries';
+import { listLeaguesLong } from '@/src/graphql/custom-queries';
 
 export default function LeagueTable({ sport, selectedLeague, setSelectedLeague}) {
     const [newLeagueModal, setNewLeagueModal] = useState(false);
     const [leagues, setLeagues] = useState([]);
 
-    const listLeaguesFunc = () => {
+    useEffect(() => {
+        listLeaguesFunc();
+    }, [])
+
+    const listLeaguesFunc = async () => {
+        const timer = setTimeout(async () => {
+            
+            const variables = {
+                filter: {
+                  sport: {
+                    eq: sport
+                  }
+                }
+              };
+              const leagues = await API.graphql({ 
+                query: listLeaguesLong, variables: variables
+              });
+              console.log('Leagues', leagues.data.listLeagues.items);
+              
+              setLeagues(leagues.data.listLeagues.items);
+              
+              if (leagues.data.listLeagues.items.length === 0) {
+                setSelectedLeague(null);
+              }
+
+              if (localStorage.getItem('lastSelectedLeague') !== null) 
+              {
+                const league = await API.graphql({ query: getLeague, variables: { id: localStorage.getItem('lastSelectedLeague')}})
+                if (league.data.getLeague !== null) {
+                    setSelectedLeague(league.data.getLeague);
+                } else {
+                    setSelectedLeague(leagues.data.listLeagues.items[0]);
+                }
+            }
+        }, 500);
+        return () => clearTimeout(timer);
     }
+
+    useEffect(() => {
+        if (selectedLeague) {
+            localStorage.setItem('lastSelectedLeague', selectedLeague.id);
+        }
+    }, [selectedLeague])
 
     return (
         <>
@@ -88,7 +132,7 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
         </div>
          {newLeagueModal && (
              <>
-             {/* <CreateLeagueModal sport={sport} openModal={newLeagueModal} setOpenModal={setNewLeagueModal} listLeaguesFunc={listLeaguesFunc} /> */}
+             <CreateLeagueModal sport={sport} openModal={newLeagueModal} setOpenModal={setNewLeagueModal} listLeaguesFunc={listLeaguesFunc} />
               </>
          )}
         </>

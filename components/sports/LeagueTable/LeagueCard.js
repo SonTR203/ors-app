@@ -26,7 +26,7 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
                     {league.name}
                 </th>
                 <td class="px-5 py-3 translate-x-2">
-                    {getNumberOfTeams(league)} / {league.maxteams}
+                    {/* {getNumberOfTeams(league)} / {league.maxteams} */}
                 </td>
                 <td class="px-6 py-3">
                     <ul>

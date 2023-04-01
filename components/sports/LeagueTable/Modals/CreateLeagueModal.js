@@ -8,8 +8,97 @@
 import React, { useState, useEffect } from 'react';
 import CoordinatorChip from '../CoordinatorDropdown/CoordinatorChip';
 import CoordinatorDropdown from '../CoordinatorDropdown';
+import { createLeague } from '@/src/graphql/mutations';
+import { listLeaguesLong } from '@/src/graphql/custom-queries';
 
-export default function CreateLeagueModal({ sport, setOpenModal, listLeaguesFunc  }) {
+export default function CreateLeagueModal({ sport, setOpenModal  }) {
+    const [leagueName, setLeagueName] = useState('');
+    const [leagueCoordinators, setLeagueCoordinators] = useState([]);
+    const [numPerPeriod, setNumPerPeriod] = useState();
+    const [timePerPeriod, setTimePerPeriod] = useState();
+    const [type, setType] = useState('');
+    const [description, setDescription] = useState('');
+    const [founded, setFounded] = useState(null);
+
+    const [openCoordinatorDrop, setOpenCoordinatorDrop] = useState(false);
+    const [listUsers, setListUsers] = useState([]);
+    const [message, setMessage] = useState(null);
+    var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setMessage(null);
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, [message]);
+
+    useEffect(() => {
+        fetchUsers();
+    }, [])
+
+    const fetchUsers = (e) => {
+        var params = {
+            UserPoolId: 'us-east-1_70GCK7G6t', /* required */
+        };
+        cognitoidentityserviceprovider.listUsers(params, function(err, data) {
+            if (err) {
+                console.log(err, err.stack);
+            } else {
+                setListUsers(data.Users);
+            }
+        })
+    }
+
+    const saveLeague = async (e) => {
+        e.preventDefault();
+        if (leagueName === '') {
+            setMessage({status: 'error', message: 'Please fillout all required fields.'});
+            return;
+        }
+        try {
+            const data = {
+                name: leagueName,
+                sport: sport,
+                date_founded: new Date(),
+                cost_per_individual: 32,
+                cost_per_team: 320,
+                coordinators: leagueCoordinators,
+                description: description,
+                number_of_periods: numPerPeriod,
+                time_per_period: timePerPeriod,
+            }
+            const apiData = await API.graphql({
+                query: createLeague,
+                variables: { input: data },
+            });
+            listLeaguesFunc(apiData.data.createLeague);
+
+        } catch (error) {
+            setMessage({status: 'error', message: error.message});
+            console.error(error);
+        }
+    }
+
+    const listLeaguesFunc = async (newLeague) => {
+        const timer = setTimeout(async () => {
+            
+            const variables = {
+                filter: {
+                  sport: {
+                    eq: sport
+                  }
+                }
+              };
+              const leagues = await API.graphql({ 
+                query: listLeaguesLong, variables: variables
+              });
+              console.log('Leagues', leagues.data.listLeagues.items);
+              setLeagues(leagues.data.listLeagues.items);
+              setSelectedLeague(newLeague);
+              
+        }, 500);
+        return () => clearTimeout(timer);
+    }
 
     return (
     <>
@@ -35,10 +124,12 @@ export default function CreateLeagueModal({ sport, setOpenModal, listLeaguesFunc
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">League Name *</label>
                     <input value={leagueName} onChange={(e) => setLeagueName(e.target.value)} type="text" id="name" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                 </div>
+
                 <div>
-                    <label for="numberOfTeams" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"># of Teams</label>
-                    <input value={numberOfTeams} onChange={(e) => setNumberOfTeams(e.target.value)} type="number" id="numberOfTeams" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type *</label>
+                    <input value={type} onChange={(e) => setType(e.target.value)} type="text" id="name" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                 </div>
+                
                 <div className='relative cursor-pointer' onClick={() => setOpenCoordinatorDrop(!openCoordinatorDrop)}>
                     <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Coordinator</label>
                     <input value='' disabled type="text" id="name" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer" />
@@ -46,35 +137,35 @@ export default function CreateLeagueModal({ sport, setOpenModal, listLeaguesFunc
                         <ion-icon style={{fontSize: '25px'}} name="caret-down-circle-outline"></ion-icon>
                     </div>
                     <div className='flex absolute top-[2.3rem]'>
-                        {myCoordinators && myCoordinators.map((coordinator) => (
+                        {leagueCoordinators && leagueCoordinators.map((coordinator) => (
                             <>
-                                <CoordinatorChip coordinator={coordinator} myCoordinators={myCoordinators} setMyCoordinators={setMyCoordinators} />
+                                <CoordinatorChip coordinator={coordinator} leagueCoordinators={leagueCoordinators} setLeagueCoordinators={setLeagueCoordinators} />
                             </>
                         ))}
                     </div>
                 </div>
                     {openCoordinatorDrop && (
                         <>
-                        <CoordinatorDropdown openDropdown={openCoordinatorDrop} setOpenDropdown={setOpenCoordinatorDrop} myCoordinators={myCoordinators} setMyCoordinators={setMyCoordinators} listUsers={listUsers} />
+                        <CoordinatorDropdown openDropdown={openCoordinatorDrop} setOpenDropdown={setOpenCoordinatorDrop} leagueCoordinators={leagueCoordinators} setLeagueCoordinators={setLeagueCoordinators} listUsers={listUsers} />
                         <div onClick={(e) => setOpenCoordinatorDrop(false)} class='z-[200] opacity-0 bg-gray-500 fixed top-0 left-0 w-[100%] h-[100%]' />
                         </>
                     )}
 
-                <div className='flex justify-end'>
-                    <div>
-                    <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                    <div class="relative">
-                        <select value={status} onChange={(e) => setStatus(e.target.value)} class="block appearance-none w-full bg-gray-100 border border-gray-400 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="level">
-                        <option value="Active">Active</option>
-                        <option value="Completed">Completed</option>
-                        </select>
-                    </div>
-                    </div>
+                <div className='flex justify-between'>
+                <div>
+                    <label for="numPerPeriod" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Number of Periods</label>
+                    <input value={numPerPeriod} onChange={(e) => setNumPerPeriod(e.target.value)} type="text" id="numPerPeriod" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                 </div>
+                <div>
+                    <label for="timePerPeriod" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Time per Period</label>
+                    <input value={timePerPeriod} onChange={(e) => setTimePerPeriod(e.target.value)} type="text" id="timePerPeriod" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                </div>
+                </div>
+
 
                 <div>
                     <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">League Description</label>
-                    <textarea value={leagueDescription} onChange={(e) => setLeagueDescription(e.target.value)} id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""></textarea>
+                    <textarea value={description} onChange={(e) => setDescription(e.target.value)} id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""></textarea>
                 </div>
 
                 {message && (<p id="standard_error_help" className={`mt-4 text-center text-sm ${message.status === 'success' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}><span className="font-medium">{message.message}</span></p>)}
