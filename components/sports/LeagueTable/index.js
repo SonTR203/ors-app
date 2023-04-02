@@ -76,9 +76,6 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
                         <th scope="col" class="font-medium px-6 py-4">
                             
                         </th>
-                        <th scope="col" class="font-medium px-6 py-4">
-                            
-                        </th>
                         <th className='absolute right-5 top-2'>
                             <CreateButton label="Create New League"
                                             state={newLeagueModal}
@@ -92,13 +89,10 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
                             Name
                         </th>
                         <th scope="col" class="font-light px-6 py-2">
-                            # of Teams
+                            Type
                         </th>
                         <th scope="col" class="font-light px-6 py-2">
                             Coordinator(s)
-                        </th>
-                        <th scope="col" class="font-light px-6 py-2">
-                            Status
                         </th>
                         <th scope="col" class="font-light py-2 border-r-[1px] text-center border-gray-400">
                             Action
@@ -121,8 +115,6 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
                         </td>
                         <td class="px-6 py-4">
                         </td>
-                        <td class="px-6 py-4">
-                        </td>
                         <td class="flex gap-4 px-6 py-4 text-center">
                         </td>
                     </tr>
@@ -132,7 +124,7 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
         </div>
          {newLeagueModal && (
              <>
-             <CreateLeagueModal sport={sport} openModal={newLeagueModal} setOpenModal={setNewLeagueModal} listLeaguesFunc={listLeaguesFunc} />
+             <CreateLeagueModal sport={sport} openModal={newLeagueModal} setOpenModal={setNewLeagueModal} setLeagues={setLeagues} setSelectedLeague={setSelectedLeague} />
               </>
          )}
         </>

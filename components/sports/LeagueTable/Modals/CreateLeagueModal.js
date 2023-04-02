@@ -6,12 +6,13 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { API } from 'aws-amplify';
 import CoordinatorChip from '../CoordinatorDropdown/CoordinatorChip';
 import CoordinatorDropdown from '../CoordinatorDropdown';
 import { createLeague } from '@/src/graphql/mutations';
 import { listLeaguesLong } from '@/src/graphql/custom-queries';
 
-export default function CreateLeagueModal({ sport, setOpenModal  }) {
+export default function CreateLeagueModal({ sport, setOpenModal, setLeagues, setSelectedLeague }) {
     const [leagueName, setLeagueName] = useState('');
     const [leagueCoordinators, setLeagueCoordinators] = useState([]);
     const [numPerPeriod, setNumPerPeriod] = useState();
@@ -55,6 +56,7 @@ export default function CreateLeagueModal({ sport, setOpenModal  }) {
             setMessage({status: 'error', message: 'Please fillout all required fields.'});
             return;
         }
+        const coordinatorUsernames = leagueCoordinators.map(a => a.username);
         try {
             const data = {
                 name: leagueName,
@@ -62,7 +64,7 @@ export default function CreateLeagueModal({ sport, setOpenModal  }) {
                 date_founded: new Date(),
                 cost_per_individual: 32,
                 cost_per_team: 320,
-                coordinators: leagueCoordinators,
+                coordinators: coordinatorUsernames,
                 description: description,
                 number_of_periods: numPerPeriod,
                 time_per_period: timePerPeriod,
@@ -71,6 +73,7 @@ export default function CreateLeagueModal({ sport, setOpenModal  }) {
                 query: createLeague,
                 variables: { input: data },
             });
+            setMessage({status: 'success', message: 'League created successfully!'});
             listLeaguesFunc(apiData.data.createLeague);
 
         } catch (error) {
@@ -95,7 +98,7 @@ export default function CreateLeagueModal({ sport, setOpenModal  }) {
               console.log('Leagues', leagues.data.listLeagues.items);
               setLeagues(leagues.data.listLeagues.items);
               setSelectedLeague(newLeague);
-              
+              setOpenModal(false);
         }, 500);
         return () => clearTimeout(timer);
     }
@@ -103,7 +106,7 @@ export default function CreateLeagueModal({ sport, setOpenModal  }) {
     return (
     <>
 {/* // <!-- Main modal --> */}
-<div id="defaultModal" tabindex="-1" aria-hidden="true" class="fixed top-[5rem] left-0 right-0 z-[220] p-4 w-[32rem] mx-auto">
+<div id="defaultModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-[220] p-4 w-[32rem] mx-auto">
     <div class="relative w-full h-full">
         {/* <!-- Modal content --> */}
         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">

@@ -7,12 +7,35 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getImageFromS3 } from '@/utils/graphql.services';
 
-export default function UserCard() {
+export default function UserCard({ user, searchUser }) {
+    const [userImage, setUserImage] = useState(null);
+
+    useEffect(() => {
+        getImage();
+    }, [searchUser])
+
+    const getImage = async () => {
+        if (user.Attributes.find(o => o.Name === 'picture')['Value'] !== 'none') {
+            let url = await getImageFromS3(user.Attributes.find(o => o.Name === 'picture')['Value']);
+            setUserImage(url);
+        } else {
+            setUserImage(null);
+        }
+    }
     
     return (
         <div class="flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-            <Image objectFit='cover' src={userImage !== null ? userImage : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'} alt={`Player image`} style={{ width: '3rem', height: '3rem', borderColor: 'black', borderWidth: '0.1px', boxShadow: '2px 2px 5px gray', borderRadius: '50px' }} />
+
+            <img
+                style={{ objectFit: 'cover' }}
+                width={132}
+                height={132}
+                className="w-[3rem] h-[3rem] rounded-full shadow-md border border-black"
+                src={`${userImage ? userImage : "/images/defaultProfilePic.jpeg"}`}
+            />
+            
             <p className='text-sm'>{user.Attributes.find(o => o.Name === 'name')['Value']} {user.Attributes.find(o => o.Name === 'family_name')['Value']}</p>
         </div>
     )
