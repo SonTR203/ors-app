@@ -37,33 +37,20 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
                 if (err) console.log(err, err.stack); // an error occurred
                 else     console.log(data);           // successful response
                     setUsers((users) => {
-                        return uniqueById([...users, data]);
+                        return uniqueByUsername([...users, data]);
                     });
             });
         })
     }
 
-    function uniqueById(items) {
+    function uniqueByUsername(items) {
         const set = new Set();
         return items.filter((item) => {
           const isDuplicate = set.has(item.Username);
           set.add(item.Username);
           return !isDuplicate;
         });
-      }
-
-    // const fetchUser = async (user) => {
-    //     let myData = 'Test';
-    //     var params = {
-    //         UserPoolId: 'us-east-1_70GCK7G6t',
-    //         Username: user /* required */
-    //       };
-    //       await cognitoidentityserviceprovider.adminGetUser(params, function(err, data) {
-    //         if (err) console.log(err, err.stack); // an error occurred
-    //         else     console.log(data);           // successful response
-    //             return "Justin";
-    //     });
-    // }
+    }
 
     return (
         <>
