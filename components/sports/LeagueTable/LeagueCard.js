@@ -10,6 +10,7 @@ import AWS from 'aws-sdk';
 import DeleteLeagueModal from './Modals/DeleteLeagueModal';
 import EditLeagueModal from './Modals/EditLeagueModal';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 // Tabler Icons
 import { IconCalendarDue } from '@tabler/icons-react';
 import { IconUsers } from '@tabler/icons-react';
@@ -20,6 +21,7 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
     const [users, setUsers] = useState([]);
     const [editModal, setEditModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
+    const router = useRouter();
     var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
 
     useEffect(() => {
@@ -48,8 +50,13 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
         return items.filter((item) => {
           const isDuplicate = set.has(item.Username);
           set.add(item.Username);
-          return !isDuplicate;
+          return !isDuplicate;å
         });
+    }
+
+    const goToUserPage = (e, username) => {
+        e.stopPropagation();
+        router.push(`/players/${username}`)
     }
 
     return (
@@ -69,7 +76,7 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
                     {users && users.map((coordinator) => (
                         <>
                         <li className="text-blue-700 text-sm">
-                        <Link href={`/players/${coordinator.Username}`}>{coordinator.UserAttributes.find(o => o.Name === 'name')['Value']} {coordinator.UserAttributes.find(o => o.Name === 'family_name')['Value']}</Link>
+                        <p onClick={(e) => goToUserPage(e, coordinator.Username)}>{coordinator.UserAttributes.find(o => o.Name === 'name')['Value']} {coordinator.UserAttributes.find(o => o.Name === 'family_name')['Value']}</p>
                         </li>
                         </>
                     ))}

@@ -97,13 +97,24 @@ export default function TeamProfile() {
 				if (err) console.log(err, err.stack); // an error occurred
 				else     {
 					// setCaptains(data);
-					setCaptains(captains => [...captains, data] );
+					setCaptains((captains) => {
+                        return uniqueByUsername([...captains, data]);
+                    });
 					return;
 				}          // successful response
 			});
 		})
 		// console.log('Captains', captains);
 	}
+
+	function uniqueByUsername(items) {
+        const set = new Set();
+        return items.filter((item) => {
+          const isDuplicate = set.has(item.Username);
+          set.add(item.Username);
+          return !isDuplicate;
+        });
+    }
 
 	//Function for gettin profile image.
 
