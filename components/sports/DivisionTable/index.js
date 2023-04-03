@@ -5,6 +5,8 @@
  * Justin Bernard <bern0241@algonquinlive.com>
  */
 
+import { listDivisions } from '@/src/graphql/queries';
+import { API } from 'aws-amplify';
 import React, { useState, useEffect } from 'react';
 import CreateButton from '../CreateButton';
 import DivisionCard from './DivisionCard';
@@ -15,7 +17,45 @@ export default function DivisionTable({ selectedDivision, setSelectedDivision, s
     const [divisions, setDivisions] = useState([]);
     const [showTable, setShowTable] = useState(false);
 
-    const listDivisionsFunc = () => {
+    useEffect(() => {
+        if (selectedSeason) {
+            listDivisionsFunc();
+        }
+    }, [selectedSeason])
+
+    const listDivisionsFunc = async () => {
+        const variables = {
+            filter: {
+                season: {
+                    eq: selectedSeason.id
+                }
+            }
+        }
+        const divisions = await API.graphql({
+            query: listDivisions, variable: variables,
+        })
+        setDivisions(divisions.data.listDivisions.items);
+        setSelectedDivision(divisions.data.listDivisions.items[0]);
+    }
+
+    useEffect(() => {
+        if (selectedLeague) {
+            if (selectedLeague.Seasons && selectedLeague.Seasons.items.length !== 0) {
+                setShowTable(true)
+            }
+        }
+        if (selectedSeason) {
+            setShowTable(true);
+        }
+        if (selectedLeague === null || selectedSeason === null) {
+            setDivisions([]);
+            setShowTable(false);
+            setSelectedDivision(null);
+        }
+    }, [selectedLeague, selectedSeason])
+
+    if (!showTable) {
+        return;
     }
 
     return (
@@ -53,10 +93,7 @@ export default function DivisionTable({ selectedDivision, setSelectedDivision, s
                             Level
                         </th>
                         <th scope="col" class="font-light px-6 py-2">
-                            Description
-                        </th>
-                        <th scope="col" class="font-light px-6 py-2">
-                            Status
+                            Team Count
                         </th>
                         <th scope="col" class="font-light py-2 border-r-[1px] text-center border-gray-400">
                             Action
@@ -94,8 +131,6 @@ export default function DivisionTable({ selectedDivision, setSelectedDivision, s
                         </td>
                         <td class="px-6 py-4">
                         </td>
-                        <td class="px-6 py-4">
-                        </td>
                         <td class="flex gap-4 px-6 py-4 text-center">
                         </td>
                     </tr>
@@ -105,7 +140,7 @@ export default function DivisionTable({ selectedDivision, setSelectedDivision, s
         </div>
         {newDivisionModal && (
             <>
-            {/* <CreateDivisionModal openModal={newDivisionModal} setOpenModal={setNewDivisionModal} selectedSeason={selectedSeason} listDivisionsFunc={listDivisionsFunc} setSelectedDivision={setSelectedDivision} /> */}
+            <CreateDivisionModal openModal={newDivisionModal} setOpenModal={setNewDivisionModal} selectedSeason={selectedSeason} listDivisionsFunc={listDivisionsFunc} setSelectedDivision={setSelectedDivision} />
                 </>
         )}
         </>
