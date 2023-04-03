@@ -6,8 +6,46 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { createDivision } from '@/src/graphql/mutations';
+import { API } from 'aws-amplify';
 
-export default function CreateDivisionModal({ setOpenModal, selectedSeason, listDivisionFunc, setSelectedDivision }) {
+export default function CreateDivisionModal({ setOpenModal, selectedSeason, listDivisionsFunc, setSelectedDivision }) {
+    const [divisionName, setDivisionName] = useState('');
+    const [level, setLevel] = useState('');
+    const [message, setMessage] = useState(null);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setMessage(null);
+        }, 5000);
+        return () => clearTimeout(timer);
+    }, [message]);
+
+    const saveDivision = async (e) => {
+        e.preventDefault();
+        if (divisionName === '' || level === '') {
+            setMessage({status: 'error', message: 'Please fillout required fields.'});
+            return;
+        }
+        try {
+            const data = {
+                season: selectedSeason.id,
+                name: divisionName,
+                level: level
+            }
+            const apiData = await API.graphql({
+                query: createDivision,
+                variables: { input: data },
+            })
+            listDivisionsFunc();
+            setOpenModal(false);
+            setSelectedDivision(apiData.data.createDivision);
+            setMessage({status: 'success', message: 'Division created successfully.'});
+        } catch (error) {
+            console.error(error);
+            setMessage({status: 'error', message: error.message});
+        }
+    }
     
     return (
         <>
@@ -39,36 +77,14 @@ export default function CreateDivisionModal({ setOpenModal, selectedSeason, list
                         <div class="relative">
                             <select value={level} onChange={(e) => setLevel(e.target.value)} class="block appearance-none w-full bg-gray-100 border border-gray-400 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="level">
                             <option hidden>Choose Division</option>  
-                            <option value="D - Recreational">D - Recreational</option>
-                            <option value="C - Recreational">C - Recreational</option>
-                            <option value="B - Recreational">B - Recreational</option>
-                            <option value="A - Recreational">A - Recreational</option>
-                            <option value="AA - Competitive">AA - Competitive</option>
-                            <option value="AAA - Elite">AAA - Elite</option>
+                            <option value="D">D - Recreational</option>
+                            <option value="C">C - Recreational</option>
+                            <option value="B">B - Recreational</option>
+                            <option value="A">A - Recreational</option>
+                            <option value="AA">AA - Competitive</option>
+                            <option value="AAA">AAA - Elite</option>
                             </select>
                         </div>
-                        </div>
-
-                        <div className='flex justify-between'>
-                        <div className=''>
-                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description *</label>
-                            <input value={gender} onChange={(e) => setGender(e.target.value)} type="text" id="name" class="block p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder='Co-Ed'/>
-                        </div>
-
-                        <div>
-                            <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status</label>
-                            <div class="relative">
-                                <select value={status} onChange={(e) => setStatus(e.target.value)} class="block appearance-none w-full bg-gray-100 border border-gray-400 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="level">
-                                <option value="Active">Active</option>
-                                <option value="Completed">Completed</option>
-                                </select>
-                            </div>
-                        </div>
-                        </div>
-
-                        <div>
-                            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Division Details</label>
-                            <textarea value={divisionDetails} onChange={(e) => setDivisionDetails(e.target.value)} id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder=""></textarea>
                         </div>
 
                         {message && (<p id="standard_error_help" className={`mt-4 text-center text-sm ${message.status === 'success' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}><span className="font-medium">{message.message}</span></p>)}

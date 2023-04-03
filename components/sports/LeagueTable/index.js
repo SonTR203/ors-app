@@ -1,8 +1,9 @@
 /**
- * Last updated: 2023-03-29
+ * Last updated: 2023-04-01
  *
  * Author(s):
  * Justin Bernard <bern0241@algonquinlive.com>
+ * Ghazaldeep Kaur <kaur0762@algonquinlive.com>
  */
 
 import React, { useState, useEffect } from 'react';
@@ -10,14 +11,14 @@ import { API } from 'aws-amplify';
 import CreateButton from '../CreateButton';
 import LeagueCard from './LeagueCard';
 import CreateLeagueModal from './Modals/CreateLeagueModal';
-import { getLeague } from '@/src/graphql/queries';
 import { listLeaguesLong } from '@/src/graphql/custom-queries';
+import { getLeague } from '@/src/graphql/queries';
 
 export default function LeagueTable({ sport, selectedLeague, setSelectedLeague}) {
     const [newLeagueModal, setNewLeagueModal] = useState(false);
     const [leagues, setLeagues] = useState([]);
 
-    useEffect(() => {
+    useEffect(()=>{
         listLeaguesFunc();
     }, [])
 
@@ -57,7 +58,7 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
 
     useEffect(() => {
         if (selectedLeague) {
-            localStorage.setItem('lastSelectedLeague', selectedLeague.id);
+            localStorage.setItem('lastSelectedLeague', selectedLeague.id)
         }
     }, [selectedLeague])
 
@@ -101,9 +102,7 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
                 </thead>
                 <tbody>
                     {leagues && leagues.map((league) => (
-                    <>
-                        <LeagueCard league={league} selectedLeague={selectedLeague} setSelectedLeague={setSelectedLeague} sport={sport} listLeaguesFunc={listLeaguesFunc} />
-                    </>
+                        <LeagueCard  key={league.id} league={league} selectedLeague={selectedLeague} setSelectedLeague={setSelectedLeague} sport={sport} listLeaguesFunc={listLeaguesFunc} />
                     ))}
         
                     <tr class="bg-white border-b-[1px] border-t-[1px] border-gray-500">

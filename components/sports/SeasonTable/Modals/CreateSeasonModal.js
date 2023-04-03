@@ -1,19 +1,20 @@
 /**
- * Last updated: 2023-03-29
+ * Last updated: 2023-04-03
  *
  * Author(s):
  * Justin Bernard <bern0241@algonquinlive.com>
+ * Ghazaldeep Kaur <kaur0762@algonquinlive.com>
  */
 
-import { createSeason } from '@/src/graphql/mutations';
 import { API } from 'aws-amplify';
 import React, { useState, useEffect } from 'react';
 import Datepicker from 'tailwind-datepicker-react';
+import {createSeason} from '@/src/graphql/mutations'
 
 export default function CreateSeasonModal({ openModal, setOpenModal, selectedLeague, listSeasonsFunc, setSelectedSeason }) {
-    const [seasonName, setSeasonName] = useState('');
-    const [starts, setStarts] = useState(getConvertedDate(new Date()));    
-    const [ends, setEnds] = useState(getConvertedDate(new Date()));    
+    const [seasonName, setSeasonName] = useState("");
+    const [starts, setStarts] = useState(getConvertedDate(new Date()));
+    const [ends, setEnds] = useState(getConvertedDate(new Date()));
     const [message, setMessage] = useState(null);
 
     const [showStarts, setShowStarts] = useState(false);
@@ -28,21 +29,21 @@ export default function CreateSeasonModal({ openModal, setOpenModal, selectedLea
 
     const handleChangeStart = (selectedDate) => {
         setStarts(getConvertedDate(selectedDate));
-        console.log(getConvertedDate(selectedDate))
-      }
+        console.log(getConvertedDate(selectedDate));
+    }
     const handleChangeEnd = (selectedDate) => {
         setEnds(getConvertedDate(selectedDate));
-        console.log(getConvertedDate(selectedDate))
-      }
+        console.log(getConvertedDate(selectedDate));
+    }
 
-      const handleCloseStart = (state) => {
+    const handleCloseStart = (state) => {
         setShowStarts(state)
-      }
-      const handleCloseEnd = (state) => {
+    }
+    const handleCloseEnd = (state) => {
         setShowEnds(state)
-      }
+    }
 
-      const optionsStart = {
+    const optionsStart = {
         title: "Start Date",
         autoHide: true,
         todayBtn: false,
@@ -50,19 +51,19 @@ export default function CreateSeasonModal({ openModal, setOpenModal, selectedLea
         maxDate: new Date("2060-01-01"),
         minDate: new Date("1950-01-01"),
         theme: {
-          background: "border border-[1px] border-gray-500 shadow-lg relative right-[3rem]  translate-y-[20%]",
+            background: "border border-[1px] border-gray-500 shadow-lg relative right-[3rem]  translate-y-[20%]",
         },
         icons: {
-          prev: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-back-outline"></ion-icon>,
-          next: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-forward-outline"></ion-icon>,
+            prev: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-back-outline"></ion-icon>,
+            next: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-forward-outline"></ion-icon>,
         },
         datepickerClassNames: "top-12",
         // defaultDate: new Date('2022-8-5'),
         defaultDate: new Date(),
         language: "en",
-      }
+    }
 
-      const optionsEnd = {
+    const optionsEnd = {
         title: "End Date",
         autoHide: true,
         todayBtn: false,
@@ -70,11 +71,11 @@ export default function CreateSeasonModal({ openModal, setOpenModal, selectedLea
         maxDate: new Date("2060-01-01"),
         minDate: new Date("1950-01-01"),
         theme: {
-          background: "border border-[1px] border-gray-500 shadow-lg relative right-[3rem]  translate-y-[20%]",
+            background: "border border-[1px] border-gray-500 shadow-lg relative right-[3rem]  translate-y-[20%]",
         },
         icons: {
-          prev: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-back-outline"></ion-icon>,
-          next: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-forward-outline"></ion-icon>,
+            prev: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-back-outline"></ion-icon>,
+            next: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-forward-outline"></ion-icon>,
         },
         datepickerClassNames: "top-12",
         // defaultDate: new Date('2023-9-9'),
@@ -88,7 +89,7 @@ export default function CreateSeasonModal({ openModal, setOpenModal, selectedLea
             const offset = yourDate.getTimezoneOffset()
             yourDate = new Date(yourDate.getTime() - (offset*60*1000))
             return yourDate.toISOString().split('T')[0];
-      }
+    }
 
     const saveSeason = async (e) => {
         e.preventDefault();
@@ -105,16 +106,16 @@ export default function CreateSeasonModal({ openModal, setOpenModal, selectedLea
             }
             const apiData = await API.graphql({
                 query: createSeason,
-                variables: { input: data },
+                variables: {input: data},
+                
             })
             listSeasonsFunc();
-            setSelectedSeason(apiData.data.createSeason);
-            setOpenModal(false);
+            setSelectedSeason(apiData.data.createSeason)
             setMessage({status: 'success', message: 'Season successfully created.'});
         } catch (error) {
             setMessage({status: 'error', message: error.message});
             console.error(error);
-        }
+        }    
     }
 
     return (

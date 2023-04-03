@@ -1,32 +1,33 @@
 /**
- * Last updated: 2023-03-29
+ * Last updated: 2023-04-01
  *
  * Author(s):
  * Justin Bernard <bern0241@algonquinlive.com>
+ * Ghazaldeep Kaur <kaur0762@algonquinlive.com>
  */
 
 import React, { useState, useEffect } from 'react';
 import UserCard from './UserCard';
 
-export default function CoordinatorDropdown({ leagueCoordinators, setLeagueCoordinators, listUsers }) {
-  const [searchUser, setSearchUser] = useState('');
+export default function CoordinatorDropdown({ leagueCoordinators, setLeagueCoordinators, listUsers}) {
+    const [searchUser, setSearchUser] = useState('');
 
-  // We don't want the same coordinator twice!
+    // We don't want the same coordinator twice!
   const addCoordinator = (e, user) => {
-      e.preventDefault();
-      const found = leagueCoordinators.some(el => el.username === user.Username);
-      if (!found) {
-          let newCoordinatorInfo = {
-            name: `${user.Attributes.find(o => o.Name === 'name')['Value']} ${user.Attributes.find(o => o.Name === 'family_name')['Value']}`,
-            username: user.Username,
-          }
-          setLeagueCoordinators(leagueCoordinators => [...leagueCoordinators, newCoordinatorInfo]);
-      } else {
-        const array = leagueCoordinators.filter(item => item.username !== user.Username);
-        setLeagueCoordinators(array);
-      }
-  }
-    
+    e.preventDefault();
+    const found = leagueCoordinators.some(el => el.username === user.Username);
+    if (!found) {
+        let newCoordinatorInfo = {
+          name: `${user.Attributes.find(o => o.Name === 'name')['Value']} ${user.Attributes.find(o => o.Name === 'family_name')['Value']}`,
+          username: user.Username,
+        }
+        setLeagueCoordinators(leagueCoordinators => [...leagueCoordinators, newCoordinatorInfo]);
+    } else {
+      const array = leagueCoordinators.filter(item => item.username !== user.Username);
+      setLeagueCoordinators(array);
+    }
+}
+
     return (
     <>
     {/* <!-- Dropdown menu --> */}

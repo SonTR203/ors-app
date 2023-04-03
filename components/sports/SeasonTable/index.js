@@ -1,16 +1,17 @@
 /**
- * Last updated: 2023-03-29
+ * Last updated: 2023-04-03
  *
  * Author(s):
  * Justin Bernard <bern0241@algonquinlive.com>
+ * Ghazaldeep Kaur <kaur0762@algonquinlive.com>
  */
 
 import React, { useState, useEffect } from 'react';
-import { listSeasons } from '@/src/graphql/queries';
 import SeasonCard from './SeasonCard';
 import CreateButton from '../CreateButton';
 import CreateSeasonModal from './Modals/CreateSeasonModal';
-import { API } from 'aws-amplify';
+import { listSeasons } from '@/src/graphql/queries';
+import { API } from '@aws-amplify/api';
 
 export default function SeasonTable({ selectedSeason, setSelectedSeason, selectedLeague }) {
     const [newSeasonModal, setNewSeasonModal] = useState(false);
@@ -20,14 +21,14 @@ export default function SeasonTable({ selectedSeason, setSelectedSeason, selecte
         if (selectedLeague) {
             listSeasonsFunc();
         }
-        if (selectedLeague === null) {
+        if (selectedLeague = null) {
             setSeasons([]);
             setSelectedSeason(null);
         }
     }, [selectedLeague])
 
     const listSeasonsFunc = async () => {
-        const variables = {
+        const variables = { 
             filter: {
                 league: {
                     eq: selectedLeague.id
@@ -36,14 +37,14 @@ export default function SeasonTable({ selectedSeason, setSelectedSeason, selecte
         }
         const seasons = await API.graphql({
             query: listSeasons, variables: variables
-        });
+        })
         setSeasons(seasons.data.listSeasons.items);
 
         if (seasons.data.listSeasons.items.length !== 0) {
             setSelectedSeason(seasons.data.listSeasons.items[0]);
-        } else {
+          } else {
             setSelectedSeason(null);
-        }
+          }
     }
 
     return (

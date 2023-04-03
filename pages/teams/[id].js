@@ -1,5 +1,5 @@
 /**
- * Last updated: 2023-03-30
+ * Last updated: 2023-04-03
  *
  * Author(s):
  * Ghazaldeep Kaur <kaur0762@algonquinlive.com>
@@ -98,13 +98,12 @@ export default function TeamProfile() {
 				else     {
 					// setCaptains(data);
 					setCaptains((captains) => {
-                        return uniqueByUsername([...captains, data]);
-                    });
+						return uniqueByUsername([...captains, data]);
+					} );
 					return;
-				}          // successful response
+				}          
 			});
 		})
-		// console.log('Captains', captains);
 	}
 
 	function uniqueByUsername(items) {
@@ -125,71 +124,6 @@ export default function TeamProfile() {
 		setProfileImage(url);
 	};
 
-	//Function to delete Player
-
-	async function deletePlayer(player){
-			console.log(player.Username);
-			/**DELETE PLAYER FROM TEAM */
-		// in team.team_history, find the current SoccerTeamStat object, which represents the current season
-		// in this phase no history, so its always going to be team.team_history[0]
-		// team.team_history[0], which is an array, remove the player's id from the array
-
-		// store a copy version of team.team_history[0] in an array
-		// const newTeamHistoryArray = team.team_history[0]
-
-		// remove the player id from the array
-		// newTeamHistoryArray.team_history[0].splice(index, 1)
-		
-		console.log(team.team_history[0]);
-
-		const newTeamRosterArray = team.team_history[0].roster.filter(item => item !== player.Username)
-		// console.log(newTeamHistoryArray);
-
-		// const newTeamHistoryArray = 
-		// team.team_history[0].roster = newTeamRosterArray
-
-		const data = {
-			id: teamId,
-			team_history:{
-				roster: newTeamRosterArray
-			}
-		}
-		const resp = await API.graphql({
-			query: mutations.updateTeam,
-			variables: {
-				input: data,
-			},
-		});
-
-		// run the updateTeam function
-		/**
-		 * updateTeam(
-		 * {
-		 * 	team_history: newTeamHistoryArray
-		 * }
-		 * )
-		 */
-
-		/**DELETE TEAM FROM PLAYER */
-		// if doest have current player, get current player using the id (should be username)
-
-		// the teams are stored in player.soccer_stats
-		// const playerTeams = player.soccer_stats
-
-		// find the index of the object that represents the team that the player is being removed from
-		// const teamIndex = player.soccer_stats.indexOf(e => e.team === team.id)
-
-		// remove this object from the array
-		// playerTeams.soccer_stats.splice(teamIndex, 1)
-
-		// run the update function 
-		/**
-		 * updatePlayer({
-		 * 	soccer_starts: playerTeams
-		 * })
-		 */
-	}
-
 	const fetchPlayersFromTeam = async () => {
 		const variables = {
 			filter: {
@@ -204,6 +138,15 @@ export default function TeamProfile() {
 		  console.log('Members', players.data.listPlayers.items);
 		  setMembers(players.data.listPlayers.items);
 	}
+
+	function uniqueByUsername(items) {
+		const set = new Set();
+		return items.filter((item) => {
+			const isDuplicate = set.has(item.Username);
+			set.add(item.Username);
+			return !isDuplicate;
+		});
+}
 
 	return (
 		<main className="w-full h-screen flex flex-col gap-6 p-8">

@@ -1,8 +1,9 @@
 /**
- * Last updated: 2023-03-29
+ * Last updated: 2023-04-03
  *
  * Author(s):
  * Justin Bernard <bern0241@algonquinlive.com>
+ * Ghazaldeep Kaur <kaur0762@algonquinlive.com>
  */
 
 import { listDivisions } from '@/src/graphql/queries';
@@ -32,7 +33,8 @@ export default function DivisionTable({ selectedDivision, setSelectedDivision, s
             }
         }
         const divisions = await API.graphql({
-            query: listDivisions, variable: variables,
+            query: listDivisions,
+            variables: variables
         })
         setDivisions(divisions.data.listDivisions.items);
         setSelectedDivision(divisions.data.listDivisions.items[0]);
@@ -54,7 +56,7 @@ export default function DivisionTable({ selectedDivision, setSelectedDivision, s
         }
     }, [selectedLeague, selectedSeason])
 
-    if (!showTable) {
+    if(!showTable){
         return;
     }
 
@@ -111,8 +113,6 @@ export default function DivisionTable({ selectedDivision, setSelectedDivision, s
                         <th scope="row" class="px-6 my-2 font-medium whitespace-nowrap dark:text-white flex items-center justify-center text-xs absolute left-0 right-0 mx-auto italic">
                             No divisions for this season.
                         </th>
-                        <td class="px-6 py-4">
-                        </td>
                         <td class="px-6 py-4">
                         </td>
                         <td class="px-6 py-4">

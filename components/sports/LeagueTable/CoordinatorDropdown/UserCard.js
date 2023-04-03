@@ -1,15 +1,16 @@
 /**
- * Last updated: 2023-03-29
+ * Last updated: 2023-04-01
  *
  * Author(s):
  * Justin Bernard <bern0241@algonquinlive.com>
+ * Ghazaldeep Kaur <kaur0762@algonquinlive.com>
  */
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { getImageFromS3 } from '@/utils/graphql.services';
 
-export default function UserCard({ user, searchUser }) {
+export default function UserCard({user, searchUser}) {
     const [userImage, setUserImage] = useState(null);
 
     useEffect(() => {
@@ -27,7 +28,6 @@ export default function UserCard({ user, searchUser }) {
     
     return (
         <div class="flex items-center px-4 py-2 gap-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-
             <img
                 style={{ objectFit: 'cover' }}
                 width={132}
@@ -35,7 +35,6 @@ export default function UserCard({ user, searchUser }) {
                 className="w-[3rem] h-[3rem] rounded-full shadow-md border border-black"
                 src={`${userImage ? userImage : "/images/defaultProfilePic.jpeg"}`}
             />
-            
             <p className='text-sm'>{user.Attributes.find(o => o.Name === 'name')['Value']} {user.Attributes.find(o => o.Name === 'family_name')['Value']}</p>
         </div>
     )

@@ -1,19 +1,16 @@
 /**
- * Last updated: 2023-03-29
+ * Last updated: 2023-04-03
  *
  * Author(s):
  * Justin Bernard <bern0241@algonquinlive.com>
+ * Ghazaldeep Kaur <kaur0762@algonquinlive.com>
  */
 
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import DeleteSeasonModal from "./Modals/DeleteSeasonModal";
 import EditSeasonModal from "./Modals/EditSeasonModal";
-// Tabler Icons
-import { IconCalendarDue } from '@tabler/icons-react';
-import { IconUsers } from '@tabler/icons-react';
-import { IconEdit } from '@tabler/icons-react';
-import { IconTrash } from '@tabler/icons-react';
+import { IconTrash, IconEdit, IconUsers, IconCalendarDue } from '@tabler/icons-react';
 
 export default function SeasonCard({ season, selectedSeason, setSelectedSeason, selectedLeague }) {
     const [editModal, setEditModal] = useState(false);
