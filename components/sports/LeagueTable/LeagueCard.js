@@ -59,9 +59,14 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
         router.push(`/players/${username}`)
     }
 
+    const clickedLeague = (e) => {
+        e.preventDefault();
+        setSelectedLeague(league);
+    }
+
     return (
         <>
-        <tr onClick={(e) => clickedLeague(e, league)} class="bg-white border border-gray-400 cursor-pointer">
+        <tr onClick={(e) => clickedLeague(e)} class="bg-white border border-gray-400 cursor-pointer">
                 <th scope="row" class="relative px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {selectedLeague && selectedLeague.id === league.id && (
                         <div className='w-[.5rem] h-[100%] top-0 left-0 bg-blue-900 absolute'/>
