@@ -6,6 +6,10 @@ import { createGame } from '@/src/graphql/mutations';
 import makeid from '@/utils/makeId';
 import TeamDropdown from './TeamDropdown';
 import TeamCardSelected from './TeamCardSelected';
+import RefereeSearchBar from './RefereeSearchBar';
+import RefereeChip from './RefereeChip';
+import AWS from 'aws-sdk';
+import Datepicker from 'tailwind-datepicker-react';
 
 //TODO:
 //Make graphQL queries for making a match, import them
@@ -22,18 +26,55 @@ const CreateMatchModal = ({isVisible, setIsVisible }) => {
   const [homeColour, setHomeColour] = useState('Red');
   const [awayColour, setAwayColour] = useState('Blue');
   const [matchDate, setMatchDate] = useState('');
-  const [referee, setReferee] = useState([]);
+  const [referees, setReferees] = useState([]);
   const [startTime, setStartTime] = useState('');
   const [matchLocation, setMatchLocation] = useState('');
   const [openHomeTeamDrop, setOpenHomeTeamDrop] = useState(false);
   const [openAwayTeamDrop, setOpenAwayTeamDrop] = useState(false);
+  const [openRefDrop, setOpenRefDrop] = useState(false);
+  const [listUsers, setListUsers] = useState([]);
   const router = useRouter();
   const {divisionID} = router.query;
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [showFounded, setShowFounded] = useState(false);
   const [message, setMessage] = useState(null);
 
-  useEffect(() => {
-	console.log('Division ID', divisionID);
-  }, [])
+  var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider(); //Required for fetching in AWS Cognito
+
+  const options = {
+    title: "Select Game Date",
+    autoHide: true,
+    todayBtn: false,
+    clearBtn: false,
+    maxDate: new Date("2060-01-01"),
+    minDate: new Date("1950-01-01"),
+    theme: {
+      background: "border border-[1px] border-gray-500 shadow-lg relative right-0",
+    },
+    icons: {
+      prev: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-back-outline"></ion-icon>,
+      next: () => <ion-icon style={{fontSize: '1.5rem'}} name="arrow-forward-outline"></ion-icon>,
+    },
+    datepickerClassNames: "top-12",
+    defaultDate: new Date(),
+    language: "en",
+  }
+
+  function getConvertedDate(date) {
+    let yourDate = date
+        yourDate.toISOString().split('T')[0]
+        const offset = yourDate.getTimezoneOffset()
+        yourDate = new Date(yourDate.getTime() - (offset*60*1000))
+        return yourDate.toISOString().split('T')[0];
+    }
+
+  const handleChange = (selectedDate) => {
+	setDate(getConvertedDate(selectedDate));
+	console.log(getConvertedDate(selectedDate))
+	}
+	const handleClose = (state) => {
+		setShowFounded(state)
+	}
 
   useEffect(() => {
 		const timer = setTimeout(() => {
@@ -42,39 +83,77 @@ const CreateMatchModal = ({isVisible, setIsVisible }) => {
 		return () => clearTimeout(timer);
 	}, [message]);
 
-  const createNewMatch = async () => {
+  const createNewMatch = async (e) => {
+	e.preventDefault();
     try {
-      if (!isVisible) {
-        setMessage({status: 'error', message: 'Please fill out all required fields'});
+      if (homeTeam === null || awayTeam === null || startTime === '' || location === '') {
+        setMessage({status: 'error', message: 'Please fill out all required fields.'});
         return;
       }
-      const randomId = uuidv4();
+
+	  if (homeTeam.id === awayTeam.id) {
+		setMessage({status: 'error', message: 'Teams cannot be the same.'})
+		return;
+	  }
       
       const matchData = {
-        id: randomId,
-        division: 0,
-        date: "",
-        location: "",
-        status: "",
-        home_roster: [],
-        away_roster: [],
-        home_score:"",
-        away_score:"",
+        division: divisionID,
+        date: new Date().toISOString(),
+        location: location,
+        status: "NOT_STARTED",
+        home_roster: JSON.stringify(homeTeam.Players.items),
+        away_roster: JSON.stringify(awayTeam.Players.items),
+        home_score: 0,
+        away_score: 0,
         goals: [],
-        round: "",
-        referees: [],
+        round: 1,
+        referees: referees,
+		gameHomeTeamId: homeTeam.id,
+		gameAwayTeamId: awayTeam.id,
 	}
 
-      console.log(matchData)
-
+	  const apiData = await API.graphql({
+			query: createGame,
+			variables: { input: matchData },
+	});
+	console.log('New Game', apiData)
+	setMessage({status: 'success', message: 'Game was created successfully.'})
     } catch (error) {
       console.error(error)
       setMessage({status: 'error', message: error.message});
     }
   }
 
+  useEffect(() => {
+	if (homeTeam) {
+		setHomeColour(homeTeam.home_colour);
+	}
+  }, [homeTeam])
+
+  useEffect(() => {
+	if (awayTeam) {
+		setAwayColour(awayTeam.away_colour);
+	}
+  }, [awayTeam])
+
+  useEffect(() => {
+		fetchUsers();
+	}, [])
+
+	const fetchUsers = (e) => {
+		var params = {
+			UserPoolId: 'us-east-1_70GCK7G6t', /* required */
+		};
+		cognitoidentityserviceprovider.listUsers(params, function(err, data) {
+			if (err) {
+				console.log(err, err.stack);
+			} else {
+				setListUsers(data.Users);
+			}
+		})
+	}
+
   const resetData = () => {
-	
   }
 
   if (!isVisible) return;
@@ -120,7 +199,6 @@ const CreateMatchModal = ({isVisible, setIsVisible }) => {
 								<span className="sr-only">Close modal</span>
 							</button>
 						</div>
-						{message && (<p id="standard_error_help" className={`mt-4 text-center text-sm ${message.status === 'success' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}><span className="font-medium">{message.message}</span></p>)}
 
             {/* <!-- Modal body --> */}
             <div className='p-[2rem]'>
@@ -149,7 +227,7 @@ const CreateMatchModal = ({isVisible, setIsVisible }) => {
               <div className="w-1/2">
 									<label
 										htmlFor="home-team-jersey"
-										className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+										className={`block mb-2 text-sm font-medium text-gray-900 dark:text-white`}
 									>
 										Home Team Jersey Colour
 									</label>
@@ -209,38 +287,51 @@ const CreateMatchModal = ({isVisible, setIsVisible }) => {
 										setValue={setAwayColour}
 									/>
 								</div>
-              {/**Date */}
 
               {/**Referee */}
-              <div className="w-full">
-								<label
-									htmlFor="referee"
-									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-								>
-									Referee
-								</label>
-								<DropdownInput options={['Referee']}
-                value={referee}
-                setValue={setReferee} />
-							</div>
+              <div className='relative cursor-pointer' onClick={() => setOpenRefDrop(!openRefDrop)}>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Referee(s)</label>
+                        <input value='' disabled type="text" id="name" class="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer" />
+                        <div className='absolute right-2 top-[2.8rem]'>
+                            <ion-icon style={{fontSize: '25px'}} name="caret-down-circle-outline"></ion-icon>
+                        </div>
+                        <div className='flex absolute top-[2.3rem]'>
+                            {referees && referees.map((referee) => (
+                                <>
+                                    <RefereeChip referee={referee} referees={referees} setReferees={setReferees} />
+                                </>
+                            ))}
+                        </div>
+                    </div>
+                        {openRefDrop && (
+                            <>
+                            <RefereeSearchBar openDropdown={openRefDrop} setOpenDropdown={setOpenRefDrop} referees={referees} setReferees={setReferees} listUsers={listUsers} />
+                            </>
+                        )}
+
+			{/* DATE */}
+			<div className='w-full'>
+                  <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
+                  <Datepicker options={options} onChange={handleChange} show={showFounded} setShow={handleClose} />
+              </div>
 
               {/**Start Time */}
               <div className="w-full">
-								<label
+							<label
 									htmlFor="startdate"
 									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
 								>
 									Start Time
 								</label>
-								<DropdownInput options={['Start Time']}
-                value={startTime}
-                setValue={setStartTime} />
-							</div>
+								<div>
+								<input value={startTime} onChange={(e) => setStartTime(e.target.value)} type="text" id="startTime" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="3:20pm" required />
+						</div>
+				</div>
 
               {/**Duration */}
 
               {/**Location */}
-              <div className="w-full">
+              			<div className="w-full">
 								<label
 									htmlFor="location"
 									className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -248,10 +339,12 @@ const CreateMatchModal = ({isVisible, setIsVisible }) => {
 									Location
 								</label>
 								<DropdownInput options={['Location']}
-                value={matchLocation}
-                setValue={setMatchLocation} />
+									value={matchLocation}
+									setValue={setMatchLocation} />
 							</div>
-</div>
+						</div>
+
+						{message && (<p id="standard_error_help" className={`mt-4 text-center text-sm ${message.status === 'success' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}><span className="font-medium">{message.message}</span></p>)}
               
 						{/* <!-- Modal footer --> */}
 						<div className="flex justify-center items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -268,7 +361,7 @@ const CreateMatchModal = ({isVisible, setIsVisible }) => {
 							</button>
 							<button
 								onClick={(e) => {
-									//createNewMatch
+									createNewMatch(e);
 								}}
 								data-modal-hide="defaultModal"
 								type="button"

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import MatchRow from './MatchRow';
 
 const MatchesTable = ({ title = 'Scheduled matches', matches }) => {

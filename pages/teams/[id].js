@@ -170,6 +170,7 @@ export default function TeamProfile() {
 						Back to Teams
 					</Button>
 				</div>
+				<button onClick={(e) => console.log(team)}>CLICK ME</button>
 
 				<div className="grid grid-cols-3 gap-4 p-8">
 					{/* Team Image */}
@@ -179,6 +180,7 @@ export default function TeamProfile() {
 							className="rounded-full self-center w-[200px] h-[200px] object-cover"
 							alt="Team profile image."
 						></img>
+					
 						<div className="flex justify-center gap-1">
 							<Image src="/images/medal.png" width="26" height="26" alt="Medal" />
 							<Image src="/images/medal.png" width="26" height="26" alt="Medal" />
