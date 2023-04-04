@@ -32,7 +32,7 @@ export const getPlayerFunc = async (_id) => {
 	try {
 		const resp = await API.graphql({
 			query: queries.getPlayer,
-			variables: { id: _id}
+			variables: { id: _id },
 		});
 		console.log(resp);
 		return resp.data.getPlayer;
@@ -45,13 +45,14 @@ export const getPlayersByUsername = async (_id) => {
 	try {
 		const variables = {
 			filter: {
-			  user_id: {
-				eq: _id
-			  }
-			}
-		  };
-		const resp = await API.graphql({ 
-		query: queries.listPlayers, variables: variables
+				user_id: {
+					eq: _id,
+				},
+			},
+		};
+		const resp = await API.graphql({
+			query: queries.listPlayers,
+			variables: variables,
 		});
 		return resp.data.listPlayers.items;
 	} catch (err) {
@@ -391,6 +392,24 @@ export const getLeagues = async () => {
 			query: queries.listLeagues,
 		});
 		return resp.data.listLeagues.items;
+	} catch (err) {
+		console.warn(err);
+	}
+};
+/**
+ * get all games in a divisions
+ * @param {String} divisionID The id of the division to get games for
+ * @returns {Array} an array of games objects
+ */
+export const getDivisionGames = async (divisionID) => {
+	try {
+		const resp = await API.graphql({
+			query: queries.gamesByDivision,
+			variables: {
+				division: divisionID,
+			},
+		});
+		return resp.data.gamesByDivision.items;
 	} catch (err) {
 		console.warn(err);
 	}

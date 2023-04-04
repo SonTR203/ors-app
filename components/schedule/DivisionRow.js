@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-const DivisionRow = () => {
+const DivisionRow = ({ key, division }) => {
 	const router = useRouter();
 	const CalendarIcon = () => (
 		<svg width={18} height={18} fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -13,22 +13,25 @@ const DivisionRow = () => {
 		</svg>
 	);
 	const navigateToProfile = () => {
-		router.push(`/schedule/soccer/${123}`);
+		router.push({
+			pathname: `/schedule/soccer/${division.id}`,
+			query: { divisionID: division.id },
+		});
 	};
 	return (
 		<tr
-			// key={team.id}
+			key={division.id}
 			className="border-b border-brand-neutral-300 cursor-pointer"
 			onClick={navigateToProfile}
 		>
 			{/* odd:bg-white even:bg-brand-neutral-100 */}
 			<td className="p-5 font-medium">
 				<div className="flex items-center">
-					<p>{'Super Team'}</p>
+					<p>{division.name}</p>
 				</div>
 			</td>
-			<td className="p-5">{'A'}</td>
-			<td className="p-5">Co-ed</td>
+			<td className="p-5">{division.level}</td>
+			<td className="p-5">{division.abbreviation}</td>
 			<td className="p-5 flex justify-center">
 				<CalendarIcon />
 			</td>

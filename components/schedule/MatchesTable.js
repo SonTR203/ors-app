@@ -1,7 +1,7 @@
 import React from 'react';
 import MatchRow from './MatchRow';
 
-const MatchesTable = ({ title = 'Scheduled matches' }) => {
+const MatchesTable = ({ title = 'Scheduled matches', matches }) => {
 	const CircleArrowDown = () => (
 		<svg width={16} height={17} fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path
@@ -29,8 +29,7 @@ const MatchesTable = ({ title = 'Scheduled matches' }) => {
 				<table className="table-auto">
 					<thead className="w-full"></thead>
 					<tbody>
-						<MatchRow />
-						<MatchRow />
+						{matches ? matches.map((match) => <MatchRow match={match} />) : ''}
 					</tbody>
 				</table>
 			</div>

@@ -20,7 +20,7 @@ const AdminPortalDropDown = ({openDropdown, toggle, dropdownMenuNames}) => {
 	
 	return (
 		<>
-		{user && (authRoles.includes('Admin') || authRoles.includes('Owner')) && (
+		{user && (authRoles && authRoles.includes('Admin') || authRoles && authRoles.includes('Owner')) && (
 			<div className="text-white/70 hover:text-white focus:text-white">
 				<button
 					onClick={() => toggle("acp")}

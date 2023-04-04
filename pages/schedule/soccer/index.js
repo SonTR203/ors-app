@@ -1,15 +1,34 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from 'flowbite-react';
 import { IconRepeat } from '@tabler/icons-react';
 import DivisionRow from '@/components/schedule/DivisionRow';
 import ChangeSeasonModal from '@/components/schedule/ChangeSeasonModal';
-import MatchesTable from '@/components/schedule/MatchesTable';
+import { getLeagues } from '@/utils/graphql.services';
 
 const soccer = () => {
-	const [currentLeague, setCurrentLeague] = useState('');
-	const [currentSeason, setCurrentSeason] = useState('');
+	const [leagues, setLeagues] = useState([]);
+	const [divisions, setDivisions] = useState([]);
+	const [currentLeague, setCurrentLeague] = useState({});
+	const [currentSeason, setCurrentSeason] = useState({});
 	const [modalVisible, setModalVisible] = useState(false);
 	const [selectedDivision, setSelectedDivision] = useState();
+	const getAllLeagues = async () => {
+		const listOfLeagues = await getLeagues();
+		setLeagues(listOfLeagues);
+		setDefaultLeaguesAndSeasons(listOfLeagues);
+	};
+	// set default league and season to the first one
+	const setDefaultLeaguesAndSeasons = (listOfLeagues) => {
+		setCurrentLeague(listOfLeagues[0]);
+		setCurrentSeason(listOfLeagues[0].Seasons.items[0]);
+	};
+	useEffect(() => {
+		getAllLeagues();
+	}, []);
+	useEffect(() => {
+		if (!currentSeason.Divisions) return setDivisions([]);
+		setDivisions(currentSeason.Divisions.items);
+	}, [currentSeason]);
 	return (
 		<>
 			<main className="w-full flex flex-col gap-6 p-8">
@@ -20,6 +39,7 @@ const soccer = () => {
 						setCurrentSeason={setCurrentSeason}
 						currentLeague={currentLeague}
 						setCurrentLeague={setCurrentLeague}
+						leagues={leagues}
 					/>
 				)}
 				{/* Results */}
@@ -48,9 +68,24 @@ const soccer = () => {
 							</tr>
 						</thead>
 						<tbody>
-							<DivisionRow />
-							<DivisionRow />
-							<DivisionRow />
+							{divisions.length > 0 ? (
+								divisions.map((division) => (
+									<DivisionRow
+										division={division}
+										selectedDivision={selectedDivision}
+										setSelectedDivision={setSelectedDivision}
+									/>
+								))
+							) : (
+								<tr>
+									<td
+										colSpan={6}
+										className="pt-8 pb-4 text-center text-sm text-brand-neutral-800"
+									>
+										No divisions available
+									</td>
+								</tr>
+							)}
 						</tbody>
 					</table>
 				</div>

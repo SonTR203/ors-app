@@ -52,7 +52,7 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
                     setSelectedLeague(leagues.data.listLeagues.items[0]);
                 }
             }
-        }, 500);
+        }, 100);
         return () => clearTimeout(timer);
     }
 
@@ -102,7 +102,7 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
                 </thead>
                 <tbody>
                     {leagues && leagues.map((league) => (
-                        <LeagueCard  key={league.id} league={league} selectedLeague={selectedLeague} setSelectedLeague={setSelectedLeague} sport={sport} listLeaguesFunc={listLeaguesFunc} />
+                        <LeagueCard  key={league.id} league={league} selectedLeague={selectedLeague} setSelectedLeague={setSelectedLeague} sport={sport} setLeagues={setLeagues} listLeaguesFunc={listLeaguesFunc} />
                     ))}
         
                     <tr class="bg-white border-b-[1px] border-t-[1px] border-gray-500">

@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { IconTrash, IconEdit, IconUsers, IconCalendarDue } from '@tabler/icons-react';
 
-export default function LeagueCard({ league, sport, selectedLeague, setSelectedLeague }) {
+export default function LeagueCard({ league, setLeagues, sport, selectedLeague, setSelectedLeague, listLeaguesFunc }) {
     const [users, setUsers] = useState([]);
     const [editModal, setEditModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
@@ -23,30 +23,34 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
 
     useEffect(()=> {
         setUsers([]);
-        getUserListByNames();
+        getUserListByNames(league.coordinators);
     }, [])
-
-    const getUserListByNames = () => {
-
-        league.coordinators.forEach((coordinator) => {
-            var params = {
-                UserPoolId: 'us-east-1_70GCK7G6t',
-                Username: coordinator 
-              };
-              setUsers([]);
-              cognitoidentityserviceprovider.adminGetUser(params, function(err, data) {
-                if (err) console.log(err, err.stack); // an error occurred
-                // else     console.log(data);           // successful response
-                    setUsers((users) => {
-                        return uniqueByUsername([...users, data]);
-                    });
+    
+    const getUserListByNames = (coordinators) => {
+        const timer = setTimeout(() => {
+            coordinators.forEach((coordinator) => {
+                console.log('Username', coordinator);
+                var params = {
+                    UserPoolId: 'us-east-1_70GCK7G6t',
+                    Username: coordinator 
+                  };
+                  cognitoidentityserviceprovider.adminGetUser(params, function(err, data) {
+                    if (err) console.log(err, err.stack); // an error occurred
+                    // else     console.log(data);           // successful response
+                        setUsers((users) => {
+                            return uniqueByUsername([...users, data]);
+                        });
+                });
             });
-        });
+		}, 1000);
+		return () => clearTimeout(timer);
+
     }
 
     function uniqueByUsername(items) {
         const set = new Set();
         return items.filter((item) => {
+          if (item === null) return;
           const isDuplicate = set.has(item.Username);
           set.add(item.Username);
           return !isDuplicate;
@@ -61,6 +65,11 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
     const clickedLeague = (e) => {
         e.preventDefault();
         setSelectedLeague(league);
+    }
+
+    const editLeagueFunc = (e) => {
+        e.stopPropagation();
+        setEditModal(!editModal);
     }
 
     return (
@@ -87,9 +96,7 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
                 </ul>
             </td>
             <td class="flex gap-4 px-6 py-3 text-center justify-center">
-                <IconUsers style={{color: 'black', fontSize: '21px', cursor: 'pointer'}} name="people"></IconUsers>
                 <IconEdit onClick={(e) => editLeagueFunc(e)} style={{color: 'darkblue', fontSize: '21px', cursor: 'pointer'}} name="create-outline"></IconEdit>
-                <IconTrash onClick={(e) => deleteLeagueFunc(e)} style={{color: 'red', fontSize: '21px', cursor: 'pointer'}} name="trash-outline"></IconTrash>
             </td>
         </tr>
 
@@ -97,7 +104,7 @@ export default function LeagueCard({ league, sport, selectedLeague, setSelectedL
             <DeleteLeagueModal leagueInfo={league} setDeleteModal={setDeleteModal} listLeaguesFunc={listLeaguesFunc} />
         )}
         {editModal && (
-            <EditLeagueModal league={league} setOpenModal={setEditModal} sport={sport} listLeaguesFunc={listLeaguesFunc} />
+            <EditLeagueModal league={league} setOpenModal={setEditModal} sport={sport} setSelectedLeague={setSelectedLeague} setLeagues={setLeagues} listLeaguesFunc={listLeaguesFunc} getUserListByNames={getUserListByNames} />
         )}
     </>
     )
