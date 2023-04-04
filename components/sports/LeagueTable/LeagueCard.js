@@ -22,29 +22,25 @@ export default function LeagueCard({ league, setLeagues, sport, selectedLeague, 
     var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
 
     useEffect(()=> {
-        setUsers([]);
         getUserListByNames(league.coordinators);
     }, [])
     
     const getUserListByNames = (coordinators) => {
-        const timer = setTimeout(() => {
-            coordinators.forEach((coordinator) => {
-                console.log('Username', coordinator);
-                var params = {
-                    UserPoolId: 'us-east-1_70GCK7G6t',
-                    Username: coordinator 
-                  };
-                  cognitoidentityserviceprovider.adminGetUser(params, function(err, data) {
-                    if (err) console.log(err, err.stack); // an error occurred
-                    // else     console.log(data);           // successful response
-                        setUsers((users) => {
-                            return uniqueByUsername([...users, data]);
-                        });
-                });
+        setUsers([]);
+        coordinators.forEach((coordinator) => {
+            console.log('Username', coordinator);
+            var params = {
+                UserPoolId: 'us-east-1_70GCK7G6t',
+                Username: coordinator 
+                };
+                cognitoidentityserviceprovider.adminGetUser(params, function(err, data) {
+                if (err) console.log(err, err.stack); // an error occurred
+                // else     console.log(data);           // successful response
+                    setUsers((users) => {
+                        return uniqueByUsername([...users, data]);
+                    });
             });
-		}, 1000);
-		return () => clearTimeout(timer);
-
+        });
     }
 
     function uniqueByUsername(items) {

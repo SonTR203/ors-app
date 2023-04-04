@@ -105,10 +105,11 @@ export default function EditLeagueModal({ sport, league, setOpenModal, setSelect
                 variables: { input: data },
             });
             setMessage({status: 'success', message: 'League updated successfully!'});
-            console.log('My updated data', apiData);
-            listLeaguesFunc2();
-            getUserListByNames(apiData.data.updateLeague);
-            setOpenModal(false);
+            // console.log('My updated data', apiData);
+            listLeaguesFunc2(apiData.data.updateLeague);
+            // console.log('NEW COORD', apiData.data.updateLeague)
+            // getUserListByNames(apiData.data.updateLeague);
+            // setOpenModal(false);
 
         } catch (error) {
             setMessage({status: 'error', message: error.message});
@@ -133,8 +134,8 @@ export default function EditLeagueModal({ sport, league, setOpenModal, setSelect
               console.log('Leagues', leagues.data.listLeagues.items);
               
               setLeagues(leagues.data.listLeagues.items);
-              getUserListByNames(leagues.data.listLeagues.items);
               setSelectedLeague(updateLeague);
+              getUserListByNames(updateLeague.coordinators);
               setOpenModal(false);
               
         }, 500);

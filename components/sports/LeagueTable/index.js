@@ -23,37 +23,33 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
     }, [])
 
     const listLeaguesFunc = async () => {
-        const timer = setTimeout(async () => {
-            
-            const variables = {
-                filter: {
-                  sport: {
-                    eq: sport
-                  }
-                }
-              };
-              const leagues = await API.graphql({ 
-                query: listLeaguesLong, variables: variables
-              });
-              console.log('Leagues', leagues.data.listLeagues.items);
-              
-              setLeagues(leagues.data.listLeagues.items);
-              
-              if (leagues.data.listLeagues.items.length === 0) {
-                setSelectedLeague(null);
-              }
-
-              if (localStorage.getItem('lastSelectedLeague') !== null) 
-              {
-                const league = await API.graphql({ query: getLeague, variables: { id: localStorage.getItem('lastSelectedLeague')}})
-                if (league.data.getLeague !== null) {
-                    setSelectedLeague(league.data.getLeague);
-                } else {
-                    setSelectedLeague(leagues.data.listLeagues.items[0]);
+        const variables = {
+            filter: {
+                sport: {
+                eq: sport
                 }
             }
-        }, 100);
-        return () => clearTimeout(timer);
+            };
+            const leagues = await API.graphql({ 
+            query: listLeaguesLong, variables: variables
+            });
+            console.log('Leagues', leagues.data.listLeagues.items);
+            
+            setLeagues(leagues.data.listLeagues.items);
+            
+            if (leagues.data.listLeagues.items.length === 0) {
+            setSelectedLeague(null);
+            }
+
+            if (localStorage.getItem('lastSelectedLeague') !== null) 
+            {
+            const league = await API.graphql({ query: getLeague, variables: { id: localStorage.getItem('lastSelectedLeague')}})
+            if (league.data.getLeague !== null) {
+                setSelectedLeague(league.data.getLeague);
+            } else {
+                setSelectedLeague(leagues.data.listLeagues.items[0]);
+            }
+        }
     }
 
     useEffect(() => {
@@ -102,7 +98,7 @@ export default function LeagueTable({ sport, selectedLeague, setSelectedLeague})
                 </thead>
                 <tbody>
                     {leagues && leagues.map((league) => (
-                        <LeagueCard  key={league.id} league={league} selectedLeague={selectedLeague} setSelectedLeague={setSelectedLeague} sport={sport} setLeagues={setLeagues} listLeaguesFunc={listLeaguesFunc} />
+                        <LeagueCard key={league.id} league={league} selectedLeague={selectedLeague} setSelectedLeague={setSelectedLeague} sport={sport} setLeagues={setLeagues} listLeaguesFunc={listLeaguesFunc} />
                     ))}
         
                     <tr class="bg-white border-b-[1px] border-t-[1px] border-gray-500">
