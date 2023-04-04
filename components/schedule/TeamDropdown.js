@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { API } from 'aws-amplify';
 import { listTeams } from '@/src/graphql/queries';
+import TeamCard from './TeamCard';
 
 export default function TeamDropdown({ state, setState, setOpenDropdown }) {
     const [search, setSearch] = useState('');
@@ -42,7 +43,7 @@ export default function TeamDropdown({ state, setState, setOpenDropdown }) {
     return (
         <>
         {/* <!-- Dropdown menu --> */}
-        <div id="dropdownSearch" class="z-[300] border border-gray-500 absolute bg-white rounded-lg shadow-md w-[17rem] top-0 dark:bg-gray-700">
+        <div id="dropdownSearch" class="z-[300] border border-gray-500 absolute bg-white rounded-lg shadow-md w-[17rem] dark:bg-gray-700">
         <div class="p-3">
           <label for="input-group-search" class="sr-only">Search</label>
           <div class="relative">
@@ -65,7 +66,7 @@ export default function TeamDropdown({ state, setState, setOpenDropdown }) {
             .map((team) => (
                 <>
                 <li className='cursor-pointer' onClick={(e) => setTeamFunc(e, team)}>
-                    {/* <TeamCard searchUser={searchUser} team={team} /> */}
+                    <TeamCard search={search} team={team} />
                 </li>
                 </>
             ))}
