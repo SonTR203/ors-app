@@ -1,5 +1,5 @@
 /**
- * Last updated: 2023-03-15
+ * Last updated: 2023-04-3
  *
  * Author(s):
  * Ghazaldeep Kaur <kaur0762@algonquinlive.com>
@@ -17,6 +17,10 @@ import { useRouter } from 'next/router';
 import UserIdentifier from '@/components/common/UserIdentifier';
 import SignOutButton from '@/components/common/SignOutButton';
 import ViewUserGroups from '@/components/common/ViewUserGroups';
+import Spotlight from '@/components/dashboard/Spotlight';
+import GameSheets from '@/components/dashboard/GameSheets';
+import UpcomingGames from '@/components/dashboard/UpcomingGames';
+import Dashboard from '@/components/dashboard';
 export default function Home() {
 	const [user, setUser, authRoles, setAuthRoles] = useUser();
 	const router = useRouter();
@@ -29,8 +33,10 @@ export default function Home() {
 				<link rel="icon" href="/images/ORS-Logo.png" />
 			</Head>
 
-			<main className={styles.main}>
-				<div className="flex flex-col">
+			<main className="w-full grid grid-cols-4 grid-flow-row gap-4 p-8 pt-4">
+				<Dashboard />
+				
+				{/* <div className="flex flex-col">
 					<UserIdentifier />
 					<h1>Home Page</h1>
 					<button onClick={() => console.log(user)}>Click Me</button>
@@ -42,7 +48,7 @@ export default function Home() {
 					>
 						Go To Admin Portal Page
 					</button>
-				</div>
+				</div> */}
 			</main>
 		</>
 	);

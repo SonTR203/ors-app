@@ -27,7 +27,7 @@ const NavbarMenu = ({ openMenu, setOpenMenu, laptopSize, laptopHeight }) => {
 	return (
 		<>
 		<div
-			className={`overflow-hidden hover:overflow-y-scroll fixed inset-y-0 bg-brand-blue-900 h-screen py-3 w-80 flex flex-col justify-between text-neutral-500 z-[100] transition-all duration-500 ${
+			className={`overflow-x-hidden overflow-y-scroll fixed inset-y-0 bg-brand-blue-900 h-screen py-3 w-80 flex flex-col justify-between text-neutral-500 z-[100] transition-all duration-500 ${
 				openMenu ? 'left-0' : 'left-[-20rem]'
 			}`}
 		>

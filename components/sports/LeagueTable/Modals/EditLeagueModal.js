@@ -14,6 +14,7 @@ import { updateLeague } from '@/src/graphql/mutations';
 import { listLeaguesLong } from '@/src/graphql/custom-queries';
 
 export default function EditLeagueModal({ sport, league, setOpenModal, setSelectedLeague, setLeagues, getUserListByNames }) {
+
     const [leagueName, setLeagueName] = useState(league.name);
     const [leagueCoordinators, setLeagueCoordinators] = useState([]);
     const [numPerPeriod, setNumPerPeriod] = useState(league.number_of_periods);
@@ -105,11 +106,7 @@ export default function EditLeagueModal({ sport, league, setOpenModal, setSelect
                 variables: { input: data },
             });
             setMessage({status: 'success', message: 'League updated successfully!'});
-            // console.log('My updated data', apiData);
             listLeaguesFunc2(apiData.data.updateLeague);
-            // console.log('NEW COORD', apiData.data.updateLeague)
-            // getUserListByNames(apiData.data.updateLeague);
-            // setOpenModal(false);
 
         } catch (error) {
             setMessage({status: 'error', message: error.message});
@@ -119,27 +116,22 @@ export default function EditLeagueModal({ sport, league, setOpenModal, setSelect
     }
 
     const listLeaguesFunc2 = async (updateLeague) => {
-        const timer = setTimeout(async () => {
-            
-            const variables = {
-                filter: {
-                  sport: {
-                    eq: sport
-                  }
+        const variables = {
+            filter: {
+                sport: {
+                eq: sport
                 }
-              };
-              const leagues = await API.graphql({ 
-                query: listLeaguesLong, variables: variables
-              });
-              console.log('Leagues', leagues.data.listLeagues.items);
-              
-              setLeagues(leagues.data.listLeagues.items);
-              setSelectedLeague(updateLeague);
-              getUserListByNames(updateLeague.coordinators);
-              setOpenModal(false);
-              
-        }, 500);
-        return () => clearTimeout(timer);
+            }
+            };
+            const leagues = await API.graphql({ 
+            query: listLeaguesLong, variables: variables
+            });
+            console.log('Leagues', leagues.data.listLeagues.items);
+            
+            setLeagues(leagues.data.listLeagues.items);
+            getUserListByNames(updateLeague.coordinators);
+            setSelectedLeague(updateLeague);
+            setOpenModal(false);
     }
 
 

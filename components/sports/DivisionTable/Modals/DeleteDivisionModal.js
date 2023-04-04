@@ -5,13 +5,31 @@
  * Justin Bernard <bern0241@algonquinlive.com>
  */
 
- import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { API } from 'aws-amplify';
+import { deleteDivision } from '@/src/graphql/mutations';
 
  export default function DeleteDivisionModal({ seasonInfo, divisionInfo, setDeleteModal, listDivisionsFunc }) {
 
+    const deleteDivisionFunc = async (e) => {
+        try {
+          const deletedDivision = await API.graphql({
+                query: deleteDivision,
+                variables: {
+                input: { id: divisionInfo.id }
+                }
+          })
+          setDeleteModal(false);
+          listDivisionsFunc();
+        } catch (error) {
+          alert('Problem deleting Division');
+          console.error(error);
+        }
+      }
+
      return (
         <>
-        <div tabIndex="-1" class="z-[150] fixed top-[10rem] right-0 left-[0] p-4 overflow-x-hidden overflow-y-auto w-[32rem] mx-auto">
+        <div tabIndex="-1" class="z-[200] fixed top-[10rem] right-0 left-[0] p-4 overflow-x-hidden overflow-y-auto w-[32rem] mx-auto">
         <div class="relative w-full h-full max-w-md mx-auto w-[25rem]">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <button onClick={(e) => setDeleteModal(false)} type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="popup-modal">
@@ -29,7 +47,7 @@
             </div>
         </div>
         </div>
-        <div onClick={(e) => setDeleteModal(false)} class='z-[100] bg-gray-500 opacity-50 fixed top-0 left-0 w-[100%] h-[100%]' />
+        <div onClick={(e) => setDeleteModal(false)} class='z-[150] bg-gray-500 opacity-50 fixed top-0 left-0 w-[100%] h-[100%]' />
         </>
      )
  }

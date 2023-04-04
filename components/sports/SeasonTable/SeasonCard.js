@@ -12,7 +12,7 @@ import DeleteSeasonModal from "./Modals/DeleteSeasonModal";
 import EditSeasonModal from "./Modals/EditSeasonModal";
 import { IconTrash, IconEdit, IconUsers, IconCalendarDue } from '@tabler/icons-react';
 
-export default function SeasonCard({ season, selectedSeason, setSelectedSeason, selectedLeague }) {
+export default function SeasonCard({ season, selectedSeason, setSelectedSeason, selectedLeague, listSeasonsFunc }) {
     const [editModal, setEditModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const router = useRouter();
