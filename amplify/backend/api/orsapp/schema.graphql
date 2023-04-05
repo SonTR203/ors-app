@@ -1,3 +1,9 @@
+type Location @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  weblink: String
+}
+
 type SportsmanshipPoint @model @auth(rules: [{allow: public}]) {
   id: ID!
   points: Int
@@ -59,6 +65,8 @@ type Game @model @auth(rules: [{allow: public}]) {
   referees: [String]
   HomeTeam: Team! @hasOne
   AwayTeam: Team! @hasOne
+  home_color: String
+  away_colo: String
 }
 
 type Division @model @auth(rules: [{allow: public}]) {
@@ -128,6 +136,7 @@ type Team @model @auth(rules: [{allow: public}]) {
   Divisions: [Division] @manyToMany(relationName: "TeamDivision")
   Players: [Player] @hasMany(indexName: "byTeam", fields: ["id"])
   captains: [String]
+  sport: String
 }
 
 type PlayerNote @model @auth(rules: [{allow: public}]) {

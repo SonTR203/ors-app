@@ -20,6 +20,7 @@ export declare type TeamUpdateFormInputValues = {
     away_colour?: string;
     team_picture?: string;
     captains?: string[];
+    sport?: string;
 };
 export declare type TeamUpdateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -28,6 +29,7 @@ export declare type TeamUpdateFormValidationValues = {
     away_colour?: ValidationFunction<string>;
     team_picture?: ValidationFunction<string>;
     captains?: ValidationFunction<string>;
+    sport?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TeamUpdateFormOverridesProps = {
@@ -38,6 +40,7 @@ export declare type TeamUpdateFormOverridesProps = {
     away_colour?: PrimitiveOverrideProps<TextFieldProps>;
     team_picture?: PrimitiveOverrideProps<TextFieldProps>;
     captains?: PrimitiveOverrideProps<TextFieldProps>;
+    sport?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TeamUpdateFormProps = React.PropsWithChildren<{
     overrides?: TeamUpdateFormOverridesProps | undefined | null;

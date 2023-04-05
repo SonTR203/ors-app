@@ -5,6 +5,8 @@
  **************************************************************************/
 
 export { default as studioTheme } from "./studioTheme";
+export { default as LocationCreateForm } from "./LocationCreateForm";
+export { default as LocationUpdateForm } from "./LocationUpdateForm";
 export { default as SportsmanshipPointCreateForm } from "./SportsmanshipPointCreateForm";
 export { default as SportsmanshipPointUpdateForm } from "./SportsmanshipPointUpdateForm";
 export { default as LeagueCreateForm } from "./LeagueCreateForm";

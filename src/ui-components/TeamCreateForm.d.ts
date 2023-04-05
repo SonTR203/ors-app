@@ -19,6 +19,7 @@ export declare type TeamCreateFormInputValues = {
     away_colour?: string;
     team_picture?: string;
     captains?: string[];
+    sport?: string;
 };
 export declare type TeamCreateFormValidationValues = {
     name?: ValidationFunction<string>;
@@ -27,6 +28,7 @@ export declare type TeamCreateFormValidationValues = {
     away_colour?: ValidationFunction<string>;
     team_picture?: ValidationFunction<string>;
     captains?: ValidationFunction<string>;
+    sport?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TeamCreateFormOverridesProps = {
@@ -37,6 +39,7 @@ export declare type TeamCreateFormOverridesProps = {
     away_colour?: PrimitiveOverrideProps<TextFieldProps>;
     team_picture?: PrimitiveOverrideProps<TextFieldProps>;
     captains?: PrimitiveOverrideProps<TextFieldProps>;
+    sport?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type TeamCreateFormProps = React.PropsWithChildren<{
     overrides?: TeamCreateFormOverridesProps | undefined | null;

@@ -199,6 +199,7 @@ export default function TeamUpdateForm(props) {
     away_colour: "",
     team_picture: "",
     captains: [],
+    sport: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [founded, setFounded] = React.useState(initialValues.founded);
@@ -212,6 +213,7 @@ export default function TeamUpdateForm(props) {
     initialValues.team_picture
   );
   const [captains, setCaptains] = React.useState(initialValues.captains);
+  const [sport, setSport] = React.useState(initialValues.sport);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = teamRecord
@@ -224,6 +226,7 @@ export default function TeamUpdateForm(props) {
     setTeam_picture(cleanValues.team_picture);
     setCaptains(cleanValues.captains ?? []);
     setCurrentCaptainsValue("");
+    setSport(cleanValues.sport);
     setErrors({});
   };
   const [teamRecord, setTeamRecord] = React.useState(team);
@@ -244,6 +247,7 @@ export default function TeamUpdateForm(props) {
     away_colour: [],
     team_picture: [],
     captains: [],
+    sport: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -294,6 +298,7 @@ export default function TeamUpdateForm(props) {
           away_colour,
           team_picture,
           captains,
+          sport,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -355,6 +360,7 @@ export default function TeamUpdateForm(props) {
               away_colour,
               team_picture,
               captains,
+              sport,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -386,6 +392,7 @@ export default function TeamUpdateForm(props) {
               away_colour,
               team_picture,
               captains,
+              sport,
             };
             const result = onChange(modelFields);
             value = result?.founded ?? value;
@@ -415,6 +422,7 @@ export default function TeamUpdateForm(props) {
               away_colour,
               team_picture,
               captains,
+              sport,
             };
             const result = onChange(modelFields);
             value = result?.home_colour ?? value;
@@ -444,6 +452,7 @@ export default function TeamUpdateForm(props) {
               away_colour: value,
               team_picture,
               captains,
+              sport,
             };
             const result = onChange(modelFields);
             value = result?.away_colour ?? value;
@@ -473,6 +482,7 @@ export default function TeamUpdateForm(props) {
               away_colour,
               team_picture: value,
               captains,
+              sport,
             };
             const result = onChange(modelFields);
             value = result?.team_picture ?? value;
@@ -498,6 +508,7 @@ export default function TeamUpdateForm(props) {
               away_colour,
               team_picture,
               captains: values,
+              sport,
             };
             const result = onChange(modelFields);
             values = result?.captains ?? values;
@@ -534,6 +545,36 @@ export default function TeamUpdateForm(props) {
           {...getOverrideProps(overrides, "captains")}
         ></TextField>
       </ArrayField>
+      <TextField
+        label="Sport"
+        isRequired={false}
+        isReadOnly={false}
+        value={sport}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              founded,
+              home_colour,
+              away_colour,
+              team_picture,
+              captains,
+              sport: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.sport ?? value;
+          }
+          if (errors.sport?.hasError) {
+            runValidationTasks("sport", value);
+          }
+          setSport(value);
+        }}
+        onBlur={() => runValidationTasks("sport", sport)}
+        errorMessage={errors.sport?.errorMessage}
+        hasError={errors.sport?.hasError}
+        {...getOverrideProps(overrides, "sport")}
+      ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
