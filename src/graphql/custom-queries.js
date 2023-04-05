@@ -138,17 +138,25 @@ export const getDivisionWithTeams = /* GraphQL */ `
 export const getGamesByTeam = /* Graph QL */ `
  query MyQuery($teamId: ID!) {
   listGames(filter: {
-    or: [
-      { gameHomeTeamId: { eq: $teamId } },
-      { gameAwayTeamId: { eq: $teamId } }
-    ]
-  }) {
+    and: [
+		{
+		  or: [
+			{ gameHomeTeamId: { eq: $teamId } },
+			{ gameAwayTeamId: { eq: $teamId } }
+		  ]
+		},
+		{
+		  status: { eq: NOT_STARTED }
+		}
+	  ]
+	}) {
     nextToken
     items {
       id
       date
       gameHomeTeamId
       gameAwayTeamId
+	  status
     }
   }
 }

@@ -29,6 +29,19 @@ export default function Games() {
 	]);
 
 	useEffect(() => {
+		setGames(null);
+		setGameSchedule([
+			{ day: 'Sunday', games: [] },
+			{ day: 'Monday', games: [] },
+			{ day: 'Tuesday', games: [] },
+			{ day: 'Wednesday', games: [] },
+			{ day: 'Thursday', games: [] },
+			{ day: 'Friday', games: [] },
+			{ day: 'Saturday', games: [] },
+		]);
+	}, []);
+
+	useEffect(() => {
 		if (!user) return;
 		setUserId(user.username);
 	}, [user]);
@@ -45,6 +58,7 @@ export default function Games() {
 
 	useEffect(() => {
 		if (!games) return;
+		console.log(games);
 		sortGamesByDate(games);
 	}, [games]);
 
@@ -56,6 +70,7 @@ export default function Games() {
 	};
 
 	const getGames = async (id) => {
+		setGames([]);
 		const apiData = await API.graphql({
 			query: getGamesByTeam,
 			variables: { teamId: id },
