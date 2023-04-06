@@ -50,7 +50,7 @@ export default function Game({game}) {
     const reqDate = day + ", " + month + " " + date ;
     setDate(reqDate);
 
-    //Refrence from https://www.geeksforgeeks.org/how-do-you-display-javascript-datetime-in-12-hour-am-pm-format/
+    //Reference from https://www.geeksforgeeks.org/how-do-you-display-javascript-datetime-in-12-hour-am-pm-format/
     //For time of game
     let hours = resp.getHours() ;
     
