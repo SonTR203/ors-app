@@ -131,7 +131,6 @@ const EditTeamModal = ({ isVisible, setIsVisible, teamId, team }) => {
                   </svg>
                   <span className="sr-only">Close modal</span>
                 </button>
-              <button onClick={(e) => console.log(team)}>ONCLIC asd</button>
               </div>
   
               {/* <!-- Modal body --> */}
