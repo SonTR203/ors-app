@@ -24,7 +24,7 @@ export default function MemberCard({ member, fetchPlayersFromTeam, fetchCaptains
     useEffect(() => {
         // getImage();
         getUser();
-        console.log('Member',member);
+        // console.log('Member',member);
     }, [])
 
     const getUser = () => {
