@@ -27,26 +27,52 @@ export default function PlayerSpotlight() {
 	const [spotlightUser, setSpotlightUser] = useState();
 	const [profileImage, setProfileImage] = useState(null);
 	const [teams, setTeams] = useState([]);
+	const [spotlightUserRole, setSpotlightUserRole] = useState();
 
 	useEffect(() => {
 		fetchAllUsers();
-	}, [])
+	}, []);
 
 	useEffect(() => {
 		getRandomUser();
 	}, [userList]);
 
 	useEffect(() => {
+		console.log(spotlightUser);
+	}, [spotlightUser]);
+
+	useEffect(() => {
 		if (!spotlightUser) {
 			return;
 		}
 
-		const fetchSpotlightInformation = async () => {
-			await fetchTeams();
-		};
 		fetchSpotlightInformation();
 		getPicture();
 	}, [spotlightUser]);
+
+	useEffect(() => {
+		if (!teams) {
+			setSpotlightUserRole('N/A');
+			return;
+		}
+		checkPlayerRole(teams[0]);
+	}, [teams]);
+
+	const checkPlayerRole = (team) => {
+		try {
+			if (team.captains.includes(spotlightUser.Username)) {
+				setSpotlightUserRole('Captain');
+			} else {
+				setSpotlightUserRole('Player');
+			}
+		} catch (error) {
+			return;
+		}
+	};
+
+	const fetchSpotlightInformation = async () => {
+		await fetchTeams();
+	};
 
 	const fetchAllUsers = async () => {
 		var params = {
@@ -150,8 +176,10 @@ export default function PlayerSpotlight() {
 					</span>
 				</div>
 				<div className="w-full grid grid-cols-2 gap-2 text-sm font-medium">
-					<span className="text-sm font-light col-span-1">Position</span>
-					<span className="truncate col-span-1">N/A</span>
+					<span className="text-sm font-light col-span-1">Role</span>
+					<span className="truncate col-span-1">
+						{spotlightUserRole ? spotlightUserRole : "N/A"}
+					</span>
 				</div>
 			</div>
 		</div>

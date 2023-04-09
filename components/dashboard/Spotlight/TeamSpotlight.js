@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { getAllTeams } from '@/utils/graphql.services';
-import { getImageFromS3 } from '@/utils/graphql.services';
+import { getImageFromS3, uniqueByUsername } from '@/utils/graphql.services';
 import AWS from 'aws-sdk';
 
 export default function TeamSpotlight() {
@@ -16,7 +16,7 @@ export default function TeamSpotlight() {
 	const [teams, setTeams] = useState();
 	const [spotlightTeam, setSpotlightTeam] = useState();
 	const [profileImage, setProfileImage] = useState(null);
-	const [spotlightTeamCaptain, setSpotlightTeamCaptain] = useState();
+	const [spotlightTeamCaptains, setSpotlightTeamCaptains] = useState();
 
 	useEffect(() => {
 		getTeamsData();
@@ -28,16 +28,9 @@ export default function TeamSpotlight() {
 	}, [teams]);
 
 	useEffect(() => {
-		if (
-			!spotlightTeam ||
-			!spotlightTeam.team_history ||
-			!spotlightTeam.team_history[0] ||
-			!spotlightTeam.team_history[0].captains ||
-			spotlightTeam.team_history[0].captains.length === 0
-		)
-			return;
+		if (!spotlightTeam) return;
 
-		fetchCaptain(spotlightTeam.team_history[0].captains[0]);
+		fetchCaptains(spotlightTeam.captains);
 		getPicture();
 	}, [spotlightTeam]);
 
@@ -57,25 +50,27 @@ export default function TeamSpotlight() {
 		setProfileImage(url);
 	};
 
-	const fetchCaptain = (id) => {
-		try {
+	const fetchCaptains = async (captains) => {
+		if (captains === null) {
+			setSpotlightTeamCaptains([]);
+			return;
+		}
+
+		setSpotlightTeamCaptains([]);
+		captains.forEach(async (captain) => {
 			const params = {
-				Username: id,
+				Username: captain,
 				UserPoolId: 'us-east-1_70GCK7G6t',
 			};
 			cognitoidentityserviceprovider.adminGetUser(params, function (err, data) {
-				if (err) console.log(err, err.stack); // an error occurred
+				if (err) console.log(err, err.stack);
 				else {
-					setSpotlightTeamCaptain(
-						`${data.UserAttributes.find((o) => o.Name === 'name')['Value']} ${
-							data.UserAttributes.find((o) => o.Name === 'family_name')['Value']
-						}`
-					);
-				} // successful response
+					setSpotlightTeamCaptains((captains) => {
+						return uniqueByUsername([...captains, data]);
+					});
+				}
 			});
-		} catch (error) {
-			console.error(error);
-		}
+		});
 	};
 
 	const getRandomTeam = () => {
@@ -106,7 +101,7 @@ export default function TeamSpotlight() {
 				<div className="w-full grid grid-cols-2 gap-2 text-sm font-medium">
 					<span className="text-sm font-light col-span-1">Team Name</span>
 					<span className="col-span-1 truncate">
-						{spotlightTeam ? spotlightTeam.name : 'N/A'}
+						{spotlightTeam ? spotlightTeam.name : 'Unknown'}
 					</span>
 				</div>
 				<div className="w-full grid grid-cols-2 gap-2 text-sm font-medium">
@@ -114,17 +109,33 @@ export default function TeamSpotlight() {
 					<span className="truncate">Soccer</span>
 				</div>
 				<div className="w-full grid grid-cols-2 gap-2 text-sm font-medium">
-					<span className="text-sm font-light col-span-1">Team Captain</span>
+					<span className="text-sm font-light col-span-1">Team Captain(s)</span>
 					<span className="truncate col-span-1">
-						{spotlightTeamCaptain ? spotlightTeamCaptain : 'N/A'}
+						<ul>
+							{spotlightTeamCaptains &&
+								spotlightTeamCaptains.map((captain, index) => (
+									<li
+										key={index}
+									>
+										{
+											captain.UserAttributes.find((o) => o.Name === 'name')[
+												'Value'
+											]
+										}{' '}
+										{
+											captain.UserAttributes.find(
+												(o) => o.Name === 'family_name'
+											)['Value']
+										}
+									</li>
+								))}
+						</ul>
 					</span>
 				</div>
 				<div className="w-full grid grid-cols-2 gap-2 text-sm font-medium">
 					<span className="text-sm font-light col-span-1">Team Members</span>
 					<span className="truncate col-span-1">
-						{spotlightTeam
-							? spotlightTeam.team_history[0].roster.length
-							: 'N/A'}
+						{spotlightTeam ? spotlightTeam.Players.items.length : '0'}
 					</span>
 				</div>
 			</div>
