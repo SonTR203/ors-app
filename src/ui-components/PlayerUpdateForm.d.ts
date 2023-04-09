@@ -15,14 +15,17 @@ export declare type ValidationResponse = {
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type PlayerUpdateFormInputValues = {
     user_id?: string;
+    role?: string;
 };
 export declare type PlayerUpdateFormValidationValues = {
     user_id?: ValidationFunction<string>;
+    role?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type PlayerUpdateFormOverridesProps = {
     PlayerUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     user_id?: PrimitiveOverrideProps<TextFieldProps>;
+    role?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type PlayerUpdateFormProps = React.PropsWithChildren<{
     overrides?: PlayerUpdateFormOverridesProps | undefined | null;

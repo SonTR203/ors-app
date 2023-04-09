@@ -21,6 +21,12 @@
       },
       "api": {
         "orsapp": {}
+      },
+      "function": {
+        "sendEmailNotifications": {
+          "deploymentBucketName": "amplify-orsapp-dev-154029-deployment",
+          "s3Key": "amplify-builds/sendEmailNotifications-6c6e3434532f41767835-build.zip"
+        }
       }
     }
   }

@@ -38,7 +38,7 @@ type Player @model @auth(rules: [{allow: public}]) {
   id: ID!
   user_id: String
   soccer_stats: [SoccerDivisionStat]
-  teamID: ID! @index(name: "byTeam")
+  teamID: ID @index(name: "byTeam")
   role: String
 }
 
@@ -54,7 +54,7 @@ type Game @model @auth(rules: [{allow: public}]) {
   id: ID!
   division: ID! @index(name: "byDivision")
   date: AWSDateTime
-  location: String
+  location: AWSJSON
   status: GameStatusEnum
   home_roster: [AWSJSON]
   away_roster: [AWSJSON]
@@ -63,10 +63,10 @@ type Game @model @auth(rules: [{allow: public}]) {
   goals: [AWSJSON]
   round: Int
   referees: [String]
-  HomeTeam: Team! @hasOne
-  AwayTeam: Team! @hasOne
+  HomeTeam: Team @hasOne
+  AwayTeam: Team @hasOne
   home_color: String
-  away_colo: String
+  away_color: String
 }
 
 type Division @model @auth(rules: [{allow: public}]) {
@@ -74,7 +74,7 @@ type Division @model @auth(rules: [{allow: public}]) {
   name: String
   abbreviation: String
   teams: [String]
-  season: ID! @index(name: "bySeason")
+  season: ID @index(name: "bySeason")
   Games: [Game] @hasMany(indexName: "byDivision", fields: ["id"])
   level: DivisionsEnum
   description: String
@@ -131,7 +131,7 @@ type Team @model @auth(rules: [{allow: public}]) {
   home_colour: String
   away_colour: String
   TeamNotes: [TeamNote] @hasMany(indexName: "byTeam", fields: ["id"])
-  team_history: [SoccerTeamStat]
+  team_history: [AWSJSON]
   team_picture: String
   Divisions: [Division] @manyToMany(relationName: "TeamDivision")
   Players: [Player] @hasMany(indexName: "byTeam", fields: ["id"])

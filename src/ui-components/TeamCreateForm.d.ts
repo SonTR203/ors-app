@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, TextAreaFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -17,6 +17,7 @@ export declare type TeamCreateFormInputValues = {
     founded?: string;
     home_colour?: string;
     away_colour?: string;
+    team_history?: string[];
     team_picture?: string;
     captains?: string[];
     sport?: string;
@@ -26,6 +27,7 @@ export declare type TeamCreateFormValidationValues = {
     founded?: ValidationFunction<string>;
     home_colour?: ValidationFunction<string>;
     away_colour?: ValidationFunction<string>;
+    team_history?: ValidationFunction<string>;
     team_picture?: ValidationFunction<string>;
     captains?: ValidationFunction<string>;
     sport?: ValidationFunction<string>;
@@ -37,6 +39,7 @@ export declare type TeamCreateFormOverridesProps = {
     founded?: PrimitiveOverrideProps<TextFieldProps>;
     home_colour?: PrimitiveOverrideProps<TextFieldProps>;
     away_colour?: PrimitiveOverrideProps<TextFieldProps>;
+    team_history?: PrimitiveOverrideProps<TextAreaFieldProps>;
     team_picture?: PrimitiveOverrideProps<TextFieldProps>;
     captains?: PrimitiveOverrideProps<TextFieldProps>;
     sport?: PrimitiveOverrideProps<TextFieldProps>;

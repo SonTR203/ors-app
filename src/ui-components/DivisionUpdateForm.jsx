@@ -14,13 +14,14 @@ import {
   Grid,
   Icon,
   ScrollView,
+  SelectField,
+  SwitchField,
   Text,
-  TextAreaField,
   TextField,
   useTheme,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { Team } from "../models";
+import { Division } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 function ArrayField({
@@ -181,10 +182,10 @@ function ArrayField({
     </React.Fragment>
   );
 }
-export default function TeamUpdateForm(props) {
+export default function DivisionUpdateForm(props) {
   const {
     id: idProp,
-    team,
+    division,
     onSuccess,
     onError,
     onSubmit,
@@ -195,70 +196,56 @@ export default function TeamUpdateForm(props) {
   } = props;
   const initialValues = {
     name: "",
-    founded: "",
-    home_colour: "",
-    away_colour: "",
-    team_history: [],
-    team_picture: "",
-    captains: [],
-    sport: "",
+    abbreviation: "",
+    teams: [],
+    level: undefined,
+    description: "",
+    is_playoff: false,
   };
   const [name, setName] = React.useState(initialValues.name);
-  const [founded, setFounded] = React.useState(initialValues.founded);
-  const [home_colour, setHome_colour] = React.useState(
-    initialValues.home_colour
+  const [abbreviation, setAbbreviation] = React.useState(
+    initialValues.abbreviation
   );
-  const [away_colour, setAway_colour] = React.useState(
-    initialValues.away_colour
+  const [teams, setTeams] = React.useState(initialValues.teams);
+  const [level, setLevel] = React.useState(initialValues.level);
+  const [description, setDescription] = React.useState(
+    initialValues.description
   );
-  const [team_history, setTeam_history] = React.useState(
-    initialValues.team_history
-  );
-  const [team_picture, setTeam_picture] = React.useState(
-    initialValues.team_picture
-  );
-  const [captains, setCaptains] = React.useState(initialValues.captains);
-  const [sport, setSport] = React.useState(initialValues.sport);
+  const [is_playoff, setIs_playoff] = React.useState(initialValues.is_playoff);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = teamRecord
-      ? { ...initialValues, ...teamRecord }
+    const cleanValues = divisionRecord
+      ? { ...initialValues, ...divisionRecord }
       : initialValues;
     setName(cleanValues.name);
-    setFounded(cleanValues.founded);
-    setHome_colour(cleanValues.home_colour);
-    setAway_colour(cleanValues.away_colour);
-    setTeam_history(cleanValues.team_history ?? []);
-    setCurrentTeam_historyValue("");
-    setTeam_picture(cleanValues.team_picture);
-    setCaptains(cleanValues.captains ?? []);
-    setCurrentCaptainsValue("");
-    setSport(cleanValues.sport);
+    setAbbreviation(cleanValues.abbreviation);
+    setTeams(cleanValues.teams ?? []);
+    setCurrentTeamsValue("");
+    setLevel(cleanValues.level);
+    setDescription(cleanValues.description);
+    setIs_playoff(cleanValues.is_playoff);
     setErrors({});
   };
-  const [teamRecord, setTeamRecord] = React.useState(team);
+  const [divisionRecord, setDivisionRecord] = React.useState(division);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Team, idProp) : team;
-      setTeamRecord(record);
+      const record = idProp
+        ? await DataStore.query(Division, idProp)
+        : division;
+      setDivisionRecord(record);
     };
     queryData();
-  }, [idProp, team]);
-  React.useEffect(resetStateValues, [teamRecord]);
-  const [currentTeam_historyValue, setCurrentTeam_historyValue] =
-    React.useState("");
-  const team_historyRef = React.createRef();
-  const [currentCaptainsValue, setCurrentCaptainsValue] = React.useState("");
-  const captainsRef = React.createRef();
+  }, [idProp, division]);
+  React.useEffect(resetStateValues, [divisionRecord]);
+  const [currentTeamsValue, setCurrentTeamsValue] = React.useState("");
+  const teamsRef = React.createRef();
   const validations = {
     name: [],
-    founded: [],
-    home_colour: [],
-    away_colour: [],
-    team_history: [{ type: "JSON" }],
-    team_picture: [],
-    captains: [],
-    sport: [],
+    abbreviation: [],
+    teams: [],
+    level: [],
+    description: [],
+    is_playoff: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -277,23 +264,6 @@ export default function TeamUpdateForm(props) {
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
-  const convertToLocal = (date) => {
-    const df = new Intl.DateTimeFormat("default", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      calendar: "iso8601",
-      numberingSystem: "latn",
-      hourCycle: "h23",
-    });
-    const parts = df.formatToParts(date).reduce((acc, part) => {
-      acc[part.type] = part.value;
-      return acc;
-    }, {});
-    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
-  };
   return (
     <Grid
       as="form"
@@ -304,13 +274,11 @@ export default function TeamUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           name,
-          founded,
-          home_colour,
-          away_colour,
-          team_history,
-          team_picture,
-          captains,
-          sport,
+          abbreviation,
+          teams,
+          level,
+          description,
+          is_playoff,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -341,7 +309,7 @@ export default function TeamUpdateForm(props) {
             }
           });
           await DataStore.save(
-            Team.copyOf(teamRecord, (updated) => {
+            Division.copyOf(divisionRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -354,7 +322,7 @@ export default function TeamUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "TeamUpdateForm")}
+      {...getOverrideProps(overrides, "DivisionUpdateForm")}
       {...rest}
     >
       <TextField
@@ -367,13 +335,11 @@ export default function TeamUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name: value,
-              founded,
-              home_colour,
-              away_colour,
-              team_history,
-              team_picture,
-              captains,
-              sport,
+              abbreviation,
+              teams,
+              level,
+              description,
+              is_playoff,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -389,99 +355,33 @@ export default function TeamUpdateForm(props) {
         {...getOverrideProps(overrides, "name")}
       ></TextField>
       <TextField
-        label="Founded"
+        label="Abbreviation"
         isRequired={false}
         isReadOnly={false}
-        type="datetime-local"
-        value={founded && convertToLocal(new Date(founded))}
-        onChange={(e) => {
-          let value =
-            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
-          if (onChange) {
-            const modelFields = {
-              name,
-              founded: value,
-              home_colour,
-              away_colour,
-              team_history,
-              team_picture,
-              captains,
-              sport,
-            };
-            const result = onChange(modelFields);
-            value = result?.founded ?? value;
-          }
-          if (errors.founded?.hasError) {
-            runValidationTasks("founded", value);
-          }
-          setFounded(value);
-        }}
-        onBlur={() => runValidationTasks("founded", founded)}
-        errorMessage={errors.founded?.errorMessage}
-        hasError={errors.founded?.hasError}
-        {...getOverrideProps(overrides, "founded")}
-      ></TextField>
-      <TextField
-        label="Home colour"
-        isRequired={false}
-        isReadOnly={false}
-        value={home_colour}
+        value={abbreviation}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,
-              founded,
-              home_colour: value,
-              away_colour,
-              team_history,
-              team_picture,
-              captains,
-              sport,
+              abbreviation: value,
+              teams,
+              level,
+              description,
+              is_playoff,
             };
             const result = onChange(modelFields);
-            value = result?.home_colour ?? value;
+            value = result?.abbreviation ?? value;
           }
-          if (errors.home_colour?.hasError) {
-            runValidationTasks("home_colour", value);
+          if (errors.abbreviation?.hasError) {
+            runValidationTasks("abbreviation", value);
           }
-          setHome_colour(value);
+          setAbbreviation(value);
         }}
-        onBlur={() => runValidationTasks("home_colour", home_colour)}
-        errorMessage={errors.home_colour?.errorMessage}
-        hasError={errors.home_colour?.hasError}
-        {...getOverrideProps(overrides, "home_colour")}
-      ></TextField>
-      <TextField
-        label="Away colour"
-        isRequired={false}
-        isReadOnly={false}
-        value={away_colour}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              founded,
-              home_colour,
-              away_colour: value,
-              team_history,
-              team_picture,
-              captains,
-              sport,
-            };
-            const result = onChange(modelFields);
-            value = result?.away_colour ?? value;
-          }
-          if (errors.away_colour?.hasError) {
-            runValidationTasks("away_colour", value);
-          }
-          setAway_colour(value);
-        }}
-        onBlur={() => runValidationTasks("away_colour", away_colour)}
-        errorMessage={errors.away_colour?.errorMessage}
-        hasError={errors.away_colour?.hasError}
-        {...getOverrideProps(overrides, "away_colour")}
+        onBlur={() => runValidationTasks("abbreviation", abbreviation)}
+        errorMessage={errors.abbreviation?.errorMessage}
+        hasError={errors.abbreviation?.hasError}
+        {...getOverrideProps(overrides, "abbreviation")}
       ></TextField>
       <ArrayField
         onChange={async (items) => {
@@ -489,162 +389,165 @@ export default function TeamUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               name,
-              founded,
-              home_colour,
-              away_colour,
-              team_history: values,
-              team_picture,
-              captains,
-              sport,
+              abbreviation,
+              teams: values,
+              level,
+              description,
+              is_playoff,
             };
             const result = onChange(modelFields);
-            values = result?.team_history ?? values;
+            values = result?.teams ?? values;
           }
-          setTeam_history(values);
-          setCurrentTeam_historyValue("");
+          setTeams(values);
+          setCurrentTeamsValue("");
         }}
-        currentFieldValue={currentTeam_historyValue}
-        label={"Team history"}
-        items={team_history}
-        hasError={errors?.team_history?.hasError}
-        errorMessage={errors?.team_history?.errorMessage}
-        setFieldValue={setCurrentTeam_historyValue}
-        inputFieldRef={team_historyRef}
-        defaultFieldValue={""}
-      >
-        <TextAreaField
-          label="Team history"
-          isRequired={false}
-          isReadOnly={false}
-          value={currentTeam_historyValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.team_history?.hasError) {
-              runValidationTasks("team_history", value);
-            }
-            setCurrentTeam_historyValue(value);
-          }}
-          onBlur={() =>
-            runValidationTasks("team_history", currentTeam_historyValue)
-          }
-          errorMessage={errors.team_history?.errorMessage}
-          hasError={errors.team_history?.hasError}
-          ref={team_historyRef}
-          labelHidden={true}
-          {...getOverrideProps(overrides, "team_history")}
-        ></TextAreaField>
-      </ArrayField>
-      <TextField
-        label="Team picture"
-        isRequired={false}
-        isReadOnly={false}
-        value={team_picture}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              founded,
-              home_colour,
-              away_colour,
-              team_history,
-              team_picture: value,
-              captains,
-              sport,
-            };
-            const result = onChange(modelFields);
-            value = result?.team_picture ?? value;
-          }
-          if (errors.team_picture?.hasError) {
-            runValidationTasks("team_picture", value);
-          }
-          setTeam_picture(value);
-        }}
-        onBlur={() => runValidationTasks("team_picture", team_picture)}
-        errorMessage={errors.team_picture?.errorMessage}
-        hasError={errors.team_picture?.hasError}
-        {...getOverrideProps(overrides, "team_picture")}
-      ></TextField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              name,
-              founded,
-              home_colour,
-              away_colour,
-              team_history,
-              team_picture,
-              captains: values,
-              sport,
-            };
-            const result = onChange(modelFields);
-            values = result?.captains ?? values;
-          }
-          setCaptains(values);
-          setCurrentCaptainsValue("");
-        }}
-        currentFieldValue={currentCaptainsValue}
-        label={"Captains"}
-        items={captains}
-        hasError={errors?.captains?.hasError}
-        errorMessage={errors?.captains?.errorMessage}
-        setFieldValue={setCurrentCaptainsValue}
-        inputFieldRef={captainsRef}
+        currentFieldValue={currentTeamsValue}
+        label={"Teams"}
+        items={teams}
+        hasError={errors?.teams?.hasError}
+        errorMessage={errors?.teams?.errorMessage}
+        setFieldValue={setCurrentTeamsValue}
+        inputFieldRef={teamsRef}
         defaultFieldValue={""}
       >
         <TextField
-          label="Captains"
+          label="Teams"
           isRequired={false}
           isReadOnly={false}
-          value={currentCaptainsValue}
+          value={currentTeamsValue}
           onChange={(e) => {
             let { value } = e.target;
-            if (errors.captains?.hasError) {
-              runValidationTasks("captains", value);
+            if (errors.teams?.hasError) {
+              runValidationTasks("teams", value);
             }
-            setCurrentCaptainsValue(value);
+            setCurrentTeamsValue(value);
           }}
-          onBlur={() => runValidationTasks("captains", currentCaptainsValue)}
-          errorMessage={errors.captains?.errorMessage}
-          hasError={errors.captains?.hasError}
-          ref={captainsRef}
+          onBlur={() => runValidationTasks("teams", currentTeamsValue)}
+          errorMessage={errors.teams?.errorMessage}
+          hasError={errors.teams?.hasError}
+          ref={teamsRef}
           labelHidden={true}
-          {...getOverrideProps(overrides, "captains")}
+          {...getOverrideProps(overrides, "teams")}
         ></TextField>
       </ArrayField>
-      <TextField
-        label="Sport"
-        isRequired={false}
-        isReadOnly={false}
-        value={sport}
+      <SelectField
+        label="Level"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={level}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               name,
-              founded,
-              home_colour,
-              away_colour,
-              team_history,
-              team_picture,
-              captains,
-              sport: value,
+              abbreviation,
+              teams,
+              level: value,
+              description,
+              is_playoff,
             };
             const result = onChange(modelFields);
-            value = result?.sport ?? value;
+            value = result?.level ?? value;
           }
-          if (errors.sport?.hasError) {
-            runValidationTasks("sport", value);
+          if (errors.level?.hasError) {
+            runValidationTasks("level", value);
           }
-          setSport(value);
+          setLevel(value);
         }}
-        onBlur={() => runValidationTasks("sport", sport)}
-        errorMessage={errors.sport?.errorMessage}
-        hasError={errors.sport?.hasError}
-        {...getOverrideProps(overrides, "sport")}
+        onBlur={() => runValidationTasks("level", level)}
+        errorMessage={errors.level?.errorMessage}
+        hasError={errors.level?.hasError}
+        {...getOverrideProps(overrides, "level")}
+      >
+        <option
+          children="D"
+          value="D"
+          {...getOverrideProps(overrides, "leveloption0")}
+        ></option>
+        <option
+          children="C"
+          value="C"
+          {...getOverrideProps(overrides, "leveloption1")}
+        ></option>
+        <option
+          children="B"
+          value="B"
+          {...getOverrideProps(overrides, "leveloption2")}
+        ></option>
+        <option
+          children="A"
+          value="A"
+          {...getOverrideProps(overrides, "leveloption3")}
+        ></option>
+        <option
+          children="Aa"
+          value="AA"
+          {...getOverrideProps(overrides, "leveloption4")}
+        ></option>
+        <option
+          children="Aaa"
+          value="AAA"
+          {...getOverrideProps(overrides, "leveloption5")}
+        ></option>
+      </SelectField>
+      <TextField
+        label="Description"
+        isRequired={false}
+        isReadOnly={false}
+        value={description}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              abbreviation,
+              teams,
+              level,
+              description: value,
+              is_playoff,
+            };
+            const result = onChange(modelFields);
+            value = result?.description ?? value;
+          }
+          if (errors.description?.hasError) {
+            runValidationTasks("description", value);
+          }
+          setDescription(value);
+        }}
+        onBlur={() => runValidationTasks("description", description)}
+        errorMessage={errors.description?.errorMessage}
+        hasError={errors.description?.hasError}
+        {...getOverrideProps(overrides, "description")}
       ></TextField>
+      <SwitchField
+        label="Is playoff"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={is_playoff}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              name,
+              abbreviation,
+              teams,
+              level,
+              description,
+              is_playoff: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.is_playoff ?? value;
+          }
+          if (errors.is_playoff?.hasError) {
+            runValidationTasks("is_playoff", value);
+          }
+          setIs_playoff(value);
+        }}
+        onBlur={() => runValidationTasks("is_playoff", is_playoff)}
+        errorMessage={errors.is_playoff?.errorMessage}
+        hasError={errors.is_playoff?.hasError}
+        {...getOverrideProps(overrides, "is_playoff")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
@@ -656,7 +559,7 @@ export default function TeamUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || team)}
+          isDisabled={!(idProp || division)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -668,7 +571,7 @@ export default function TeamUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || team) ||
+              !(idProp || division) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

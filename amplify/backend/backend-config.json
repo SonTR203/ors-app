@@ -50,6 +50,31 @@
       "service": "Cognito"
     }
   },
+  "function": {
+    "sendEmailNotifications": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_sendEmailNotifications_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sendEmailNotifications"
+        }
+      ]
+    },
+    "AMPLIFY_function_sendEmailNotifications_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sendEmailNotifications"
+        }
+      ]
+    }
+  },
   "storage": {
     "orsresources": {
       "dependsOn": [],

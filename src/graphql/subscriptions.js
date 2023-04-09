@@ -172,18 +172,7 @@ export const onCreateGame = /* GraphQL */ `
           }
           nextToken
         }
-        team_history {
-          id
-          teamid
-          division
-          roster
-          goals
-          assists
-          yellow_cards
-          red_cards
-          games_played
-          captains
-        }
+        team_history
         team_picture
         Divisions {
           items {
@@ -217,18 +206,7 @@ export const onCreateGame = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -291,18 +269,7 @@ export const onCreateGame = /* GraphQL */ `
           }
           nextToken
         }
-        team_history {
-          id
-          teamid
-          division
-          roster
-          goals
-          assists
-          yellow_cards
-          red_cards
-          games_played
-          captains
-        }
+        team_history
         team_picture
         Divisions {
           items {
@@ -336,18 +303,7 @@ export const onCreateGame = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -393,7 +349,7 @@ export const onCreateGame = /* GraphQL */ `
         updatedAt
       }
       home_color
-      away_colo
+      away_color
       createdAt
       updatedAt
       gameHomeTeamId
@@ -434,18 +390,7 @@ export const onUpdateGame = /* GraphQL */ `
           }
           nextToken
         }
-        team_history {
-          id
-          teamid
-          division
-          roster
-          goals
-          assists
-          yellow_cards
-          red_cards
-          games_played
-          captains
-        }
+        team_history
         team_picture
         Divisions {
           items {
@@ -479,18 +424,7 @@ export const onUpdateGame = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -553,18 +487,7 @@ export const onUpdateGame = /* GraphQL */ `
           }
           nextToken
         }
-        team_history {
-          id
-          teamid
-          division
-          roster
-          goals
-          assists
-          yellow_cards
-          red_cards
-          games_played
-          captains
-        }
+        team_history
         team_picture
         Divisions {
           items {
@@ -598,18 +521,7 @@ export const onUpdateGame = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -655,7 +567,7 @@ export const onUpdateGame = /* GraphQL */ `
         updatedAt
       }
       home_color
-      away_colo
+      away_color
       createdAt
       updatedAt
       gameHomeTeamId
@@ -696,18 +608,7 @@ export const onDeleteGame = /* GraphQL */ `
           }
           nextToken
         }
-        team_history {
-          id
-          teamid
-          division
-          roster
-          goals
-          assists
-          yellow_cards
-          red_cards
-          games_played
-          captains
-        }
+        team_history
         team_picture
         Divisions {
           items {
@@ -741,18 +642,7 @@ export const onDeleteGame = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -815,18 +705,7 @@ export const onDeleteGame = /* GraphQL */ `
           }
           nextToken
         }
-        team_history {
-          id
-          teamid
-          division
-          roster
-          goals
-          assists
-          yellow_cards
-          red_cards
-          games_played
-          captains
-        }
+        team_history
         team_picture
         Divisions {
           items {
@@ -860,18 +739,7 @@ export const onDeleteGame = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -917,7 +785,7 @@ export const onDeleteGame = /* GraphQL */ `
         updatedAt
       }
       home_color
-      away_colo
+      away_color
       createdAt
       updatedAt
       gameHomeTeamId
@@ -965,18 +833,7 @@ export const onCreateDivision = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -1022,18 +879,7 @@ export const onCreateDivision = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -1062,7 +908,7 @@ export const onCreateDivision = /* GraphQL */ `
             updatedAt
           }
           home_color
-          away_colo
+          away_color
           createdAt
           updatedAt
           gameHomeTeamId
@@ -1099,7 +945,7 @@ export const onCreateDivision = /* GraphQL */ `
                 round
                 referees
                 home_color
-                away_colo
+                away_color
                 createdAt
                 updatedAt
                 gameHomeTeamId
@@ -1141,18 +987,7 @@ export const onCreateDivision = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -1230,18 +1065,7 @@ export const onUpdateDivision = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -1287,18 +1111,7 @@ export const onUpdateDivision = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -1327,7 +1140,7 @@ export const onUpdateDivision = /* GraphQL */ `
             updatedAt
           }
           home_color
-          away_colo
+          away_color
           createdAt
           updatedAt
           gameHomeTeamId
@@ -1364,7 +1177,7 @@ export const onUpdateDivision = /* GraphQL */ `
                 round
                 referees
                 home_color
-                away_colo
+                away_color
                 createdAt
                 updatedAt
                 gameHomeTeamId
@@ -1406,18 +1219,7 @@ export const onUpdateDivision = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -1495,18 +1297,7 @@ export const onDeleteDivision = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -1552,18 +1343,7 @@ export const onDeleteDivision = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -1592,7 +1372,7 @@ export const onDeleteDivision = /* GraphQL */ `
             updatedAt
           }
           home_color
-          away_colo
+          away_color
           createdAt
           updatedAt
           gameHomeTeamId
@@ -1629,7 +1409,7 @@ export const onDeleteDivision = /* GraphQL */ `
                 round
                 referees
                 home_color
-                away_colo
+                away_color
                 createdAt
                 updatedAt
                 gameHomeTeamId
@@ -1671,18 +1451,7 @@ export const onDeleteDivision = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -1756,6 +1525,7 @@ export const onCreateSeason = /* GraphQL */ `
                 founded
                 home_colour
                 away_colour
+                team_history
                 team_picture
                 captains
                 sport
@@ -1768,6 +1538,7 @@ export const onCreateSeason = /* GraphQL */ `
                 founded
                 home_colour
                 away_colour
+                team_history
                 team_picture
                 captains
                 sport
@@ -1775,7 +1546,7 @@ export const onCreateSeason = /* GraphQL */ `
                 updatedAt
               }
               home_color
-              away_colo
+              away_color
               createdAt
               updatedAt
               gameHomeTeamId
@@ -1809,6 +1580,7 @@ export const onCreateSeason = /* GraphQL */ `
                 founded
                 home_colour
                 away_colour
+                team_history
                 team_picture
                 captains
                 sport
@@ -1867,6 +1639,7 @@ export const onUpdateSeason = /* GraphQL */ `
                 founded
                 home_colour
                 away_colour
+                team_history
                 team_picture
                 captains
                 sport
@@ -1879,6 +1652,7 @@ export const onUpdateSeason = /* GraphQL */ `
                 founded
                 home_colour
                 away_colour
+                team_history
                 team_picture
                 captains
                 sport
@@ -1886,7 +1660,7 @@ export const onUpdateSeason = /* GraphQL */ `
                 updatedAt
               }
               home_color
-              away_colo
+              away_color
               createdAt
               updatedAt
               gameHomeTeamId
@@ -1920,6 +1694,7 @@ export const onUpdateSeason = /* GraphQL */ `
                 founded
                 home_colour
                 away_colour
+                team_history
                 team_picture
                 captains
                 sport
@@ -1978,6 +1753,7 @@ export const onDeleteSeason = /* GraphQL */ `
                 founded
                 home_colour
                 away_colour
+                team_history
                 team_picture
                 captains
                 sport
@@ -1990,6 +1766,7 @@ export const onDeleteSeason = /* GraphQL */ `
                 founded
                 home_colour
                 away_colour
+                team_history
                 team_picture
                 captains
                 sport
@@ -1997,7 +1774,7 @@ export const onDeleteSeason = /* GraphQL */ `
                 updatedAt
               }
               home_color
-              away_colo
+              away_color
               createdAt
               updatedAt
               gameHomeTeamId
@@ -2031,6 +1808,7 @@ export const onDeleteSeason = /* GraphQL */ `
                 founded
                 home_colour
                 away_colour
+                team_history
                 team_picture
                 captains
                 sport
@@ -2271,18 +2049,7 @@ export const onCreateTeam = /* GraphQL */ `
         }
         nextToken
       }
-      team_history {
-        id
-        teamid
-        division
-        roster
-        goals
-        assists
-        yellow_cards
-        red_cards
-        games_played
-        captains
-      }
+      team_history
       team_picture
       Divisions {
         items {
@@ -2310,7 +2077,7 @@ export const onCreateTeam = /* GraphQL */ `
                 round
                 referees
                 home_color
-                away_colo
+                away_color
                 createdAt
                 updatedAt
                 gameHomeTeamId
@@ -2352,18 +2119,7 @@ export const onCreateTeam = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -2445,18 +2201,7 @@ export const onUpdateTeam = /* GraphQL */ `
         }
         nextToken
       }
-      team_history {
-        id
-        teamid
-        division
-        roster
-        goals
-        assists
-        yellow_cards
-        red_cards
-        games_played
-        captains
-      }
+      team_history
       team_picture
       Divisions {
         items {
@@ -2484,7 +2229,7 @@ export const onUpdateTeam = /* GraphQL */ `
                 round
                 referees
                 home_color
-                away_colo
+                away_color
                 createdAt
                 updatedAt
                 gameHomeTeamId
@@ -2526,18 +2271,7 @@ export const onUpdateTeam = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -2619,18 +2353,7 @@ export const onDeleteTeam = /* GraphQL */ `
         }
         nextToken
       }
-      team_history {
-        id
-        teamid
-        division
-        roster
-        goals
-        assists
-        yellow_cards
-        red_cards
-        games_played
-        captains
-      }
+      team_history
       team_picture
       Divisions {
         items {
@@ -2658,7 +2381,7 @@ export const onDeleteTeam = /* GraphQL */ `
                 round
                 referees
                 home_color
-                away_colo
+                away_color
                 createdAt
                 updatedAt
                 gameHomeTeamId
@@ -2700,18 +2423,7 @@ export const onDeleteTeam = /* GraphQL */ `
               }
               nextToken
             }
-            team_history {
-              id
-              teamid
-              division
-              roster
-              goals
-              assists
-              yellow_cards
-              red_cards
-              games_played
-              captains
-            }
+            team_history
             team_picture
             Divisions {
               items {
@@ -2855,18 +2567,7 @@ export const onCreateTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -2888,18 +2589,7 @@ export const onCreateTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -2913,7 +2603,7 @@ export const onCreateTeamDivision = /* GraphQL */ `
               updatedAt
             }
             home_color
-            away_colo
+            away_color
             createdAt
             updatedAt
             gameHomeTeamId
@@ -2956,18 +2646,7 @@ export const onCreateTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -3006,18 +2685,7 @@ export const onCreateTeamDivision = /* GraphQL */ `
           }
           nextToken
         }
-        team_history {
-          id
-          teamid
-          division
-          roster
-          goals
-          assists
-          yellow_cards
-          red_cards
-          games_played
-          captains
-        }
+        team_history
         team_picture
         Divisions {
           items {
@@ -3051,18 +2719,7 @@ export const onCreateTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -3149,18 +2806,7 @@ export const onUpdateTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -3182,18 +2828,7 @@ export const onUpdateTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -3207,7 +2842,7 @@ export const onUpdateTeamDivision = /* GraphQL */ `
               updatedAt
             }
             home_color
-            away_colo
+            away_color
             createdAt
             updatedAt
             gameHomeTeamId
@@ -3250,18 +2885,7 @@ export const onUpdateTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -3300,18 +2924,7 @@ export const onUpdateTeamDivision = /* GraphQL */ `
           }
           nextToken
         }
-        team_history {
-          id
-          teamid
-          division
-          roster
-          goals
-          assists
-          yellow_cards
-          red_cards
-          games_played
-          captains
-        }
+        team_history
         team_picture
         Divisions {
           items {
@@ -3345,18 +2958,7 @@ export const onUpdateTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -3443,18 +3045,7 @@ export const onDeleteTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -3476,18 +3067,7 @@ export const onDeleteTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -3501,7 +3081,7 @@ export const onDeleteTeamDivision = /* GraphQL */ `
               updatedAt
             }
             home_color
-            away_colo
+            away_color
             createdAt
             updatedAt
             gameHomeTeamId
@@ -3544,18 +3124,7 @@ export const onDeleteTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
@@ -3594,18 +3163,7 @@ export const onDeleteTeamDivision = /* GraphQL */ `
           }
           nextToken
         }
-        team_history {
-          id
-          teamid
-          division
-          roster
-          goals
-          assists
-          yellow_cards
-          red_cards
-          games_played
-          captains
-        }
+        team_history
         team_picture
         Divisions {
           items {
@@ -3639,18 +3197,7 @@ export const onDeleteTeamDivision = /* GraphQL */ `
               TeamNotes {
                 nextToken
               }
-              team_history {
-                id
-                teamid
-                division
-                roster
-                goals
-                assists
-                yellow_cards
-                red_cards
-                games_played
-                captains
-              }
+              team_history
               team_picture
               Divisions {
                 nextToken
