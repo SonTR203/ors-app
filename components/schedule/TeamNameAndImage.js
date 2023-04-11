@@ -24,7 +24,7 @@ const TeamNameAndImage = ({ reverse, team, jerseyColour }) => {
 	);
 	const getPicture = async () => {
 		if (!team?.team_picture)
-			return setProfileImage('/images/defaultProfilePic.jpeg');
+			return setProfileImage("/images/defaultProfilePic.png");
 		const url = await getImageFromS3(team?.team_picture);
 		setProfileImage(url);
 	};

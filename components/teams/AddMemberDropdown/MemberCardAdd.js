@@ -34,7 +34,7 @@ export default function MemberCardAdd({user, search, selectedUsers, members}) {
             width={132}
             height={132}
             className="w-[3rem] h-[3rem] rounded-full shadow-md border border-black"
-            src={`${userImage ? userImage : "/images/defaultProfilePic.jpeg"}`}
+            src={`${userImage ? userImage : "/images/defaultProfilePic.png"}`}
         />
         <p className='text-sm'>{`${user.Attributes.find(o => o.Name === 'name')['Value']} ${user.Attributes.find(o => o.Name === 'family_name')['Value']}`}</p>
     </div>

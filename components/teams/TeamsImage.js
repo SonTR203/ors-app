@@ -18,7 +18,7 @@ export default function TeamsImage({
 	teamLogoUpload,
 	setTeamLogoUpload
 }) {
-	const defaultPic = '/images/defaultProfilePic.jpeg';
+	const defaultPic = "/images/defaultProfilePic.png";
 	const [teamLogo, setTeamLogo] = useState('');
 	const getPicture = async () => {
 		// teamLogoUpload = teamLogo;
@@ -27,7 +27,7 @@ export default function TeamsImage({
 			setTeamLogo(url);
 			return;
 		};
-		setTeamLogo('/images/defaultProfilePic.jpeg');
+		setTeamLogo("/images/defaultProfilePic.png");
 	}
 	useEffect(() => {
 		getPicture();

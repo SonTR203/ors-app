@@ -98,8 +98,8 @@ import AWS from 'aws-sdk';
                         style={{ objectFit: 'cover' }}
                         width={132}
                         height={132}
-                        className="w-[3.4rem] h-[3.4rem] rounded-full shadow-md border border-black"
-                        src={`${teamImage ? teamImage : "/images/defaultProfilePic.jpeg"}`}
+                        className="w-[3rem] h-[3rem] rounded-full shadow-md border border-black"
+                        src={`${teamImage ? teamImage : "/images/defaultProfilePic.png"}`}
                     />
                     <p>{teamDivision.team.name}</p>
                     </div>

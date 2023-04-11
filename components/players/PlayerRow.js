@@ -142,7 +142,7 @@ export default function PlayerRow({ player, index }) {
 			<td className="pl-2 sm:pl-4 py-3 text-md w-[40%]">
 				<div className="flex flex-col gap-2 min-[585px]:flex-row items-center mx-auto text-center">
 					<img
-						src={`${profileImage ? profileImage : "/images/defaultProfilePic.jpeg"}`}
+						src={`${profileImage ? profileImage : "/images/defaultProfilePic.png"}`}
 						className="rounded-full text-center w-[4.5rem] h-[4.5rem] border border-gray-500 object-cover"
 					></img>
 					<div className="flex flex-col gap-1 pl-1">

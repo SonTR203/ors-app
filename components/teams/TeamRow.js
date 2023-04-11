@@ -29,7 +29,7 @@ export default function TeamRow({ team, setCurrentTeam }) {
 
 	const getPicture = async () => {
 		if (!team.team_picture)
-			return setProfileImage('http://via.placeholder.com/60x60');
+			return setProfileImage("/images/defaultProfilePic.png");
 		const url = await getImageFromS3(team.team_picture);
 		setProfileImage(url);
 	};

@@ -38,7 +38,7 @@ export default function UserCard({ user, openDropdown, setOpenDropdown, fetchPla
                 width={132}
                 height={132}
                 className="w-[3rem] h-[3rem] rounded-full border border-brand-blue-900 cursor-pointer"
-                src={userImage ? userImage : '/images/defaultProfilePic.jpeg'}
+                src={userImage ? userImage : "/images/defaultProfilePic.png"}
                 alt="User Image"
             />
             <p className='text-sm'>{user.Attributes.find(o => o.Name === 'name')['Value']} {user.Attributes.find(o => o.Name === 'family_name')['Value']}</p>

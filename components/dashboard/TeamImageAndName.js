@@ -19,7 +19,7 @@ const TeamImageAndName = ({ src, reverse, teamName, teamId }) => {
 	}, []);
 
 	const getPicture = async () => {
-		if (!src) return setProfileImage('http://via.placeholder.com/72x72');
+		if (!src) return setProfileImage("/images/defaultProfilePic.png");
 		const url = await getImageFromS3(src);
 		setProfileImage(url);
 	};
@@ -53,7 +53,7 @@ const TeamImageAndName = ({ src, reverse, teamName, teamId }) => {
 						style={{ objectFit: 'cover' }}
 						width={72}
 						height={72}
-						className="rounded-full border w-[72px] h-[72px] cursor-pointer"
+						className="rounded-full border w-[72px] h-[72px]"
 						src={profileImage}
 					/>
 				</>

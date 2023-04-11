@@ -65,7 +65,7 @@ const Profile = () => {
 					width={132}
 					height={132}
 					className="w-[2.7rem] h-[2.7rem] rounded-full border border-brand-blue-900 cursor-pointer"
-					src={profileImage ? profileImage : '/images/defaultProfilePic.jpeg'}
+					src={profileImage ? profileImage : "/images/defaultProfilePic.png"}
 				/>
 				<ProfileDropdown user={user} setUser={setUser} openDropdown={openDropdown} setOpenDropdown={setOpenDropdown} setProfileImage={setProfileImage} />
 			</div>

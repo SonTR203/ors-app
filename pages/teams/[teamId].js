@@ -129,9 +129,7 @@ export default function TeamProfile() {
 			const captainUsernames = captains.map(captain => captain.Username);
 			if (captainUsernames.includes(user.username)) {
 				setIsCaptain(true);
-				console.log('TRUE');
 			} else {
-				console.log('FALSE');
 				setIsCaptain(false);
 			}
 		}
@@ -142,7 +140,7 @@ export default function TeamProfile() {
 
 	const getPicture = async () => {
 		if (!team.team_picture)
-			return setProfileImage('http://via.placeholder.com/200x200');
+			return setProfileImage("/images/defaultProfilePic.png");
 		const url = await getImageFromS3(team.team_picture);
 		setProfileImage(url);
 	};
@@ -204,7 +202,7 @@ export default function TeamProfile() {
 					{/* Team Image */}
 					<div className="col-span-3 sm:col-span-1 row-span-2 flex flex-col gap-4">
 						<img
-							src={profileImage}
+              src={profileImage}
 							className="rounded-full self-center w-[200px] h-[200px] object-cover"
 							alt="Team profile image."
 						></img>

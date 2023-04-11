@@ -89,17 +89,15 @@ import EditTeamModal from './EditTeamModal';
       return (
           <>
           <tr onClick={(e) => goToTeamPage(e)} class="bg-white border border-gray-400 cursor-pointer">
-                  <th scope="row" class="relative px-1 sm:px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <div className='mr-auto sm:flex gap-2 items-center flex-col sm:flex-row'>
-                        <img
-                            style={{ objectFit: 'cover' }}
-                            width={132}
-                            height={132}
-                            className="w-[4.2rem] h-[4.2rem] rounded-full shadow-md border border-black mx-auto sm:mx-0"
-                            src={`${teamImage ? teamImage : "/images/defaultProfilePic.jpeg"}`}
-                        />
-                        <p className='text-center'>{team.name}</p>
-                        </div>
+                  <th scope="row" class="relative px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white flex items-center gap-2">
+                   <img
+                         style={{ objectFit: 'cover' }}
+                         width={132}
+                         height={132}
+                         className="w-[3rem] h-[3rem] rounded-full shadow-md border border-black"
+                         src={`${teamImage ? teamImage : "/images/defaultProfilePic.png"}`}
+                     />
+                     {team.name}
                   </th>
                   <td class="text-center py-3">
                   {captains && captains.map((captain, index) => (

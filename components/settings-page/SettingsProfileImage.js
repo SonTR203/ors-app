@@ -15,11 +15,11 @@ export default function UserProfilePictureEdit({
 	profilePic,
 	setProfilePic,
 }) {
-	const defaultPic = '/images/defaultProfilePic.jpeg';
+	const defaultPic = "/images/defaultProfilePic.png";
 	const [profileImage, setProfileImage] = useState('');
 	const getPicture = async () => {
 		if (userAttributes?.picture === 'none')
-			return setProfileImage('/images/defaultProfilePic.jpeg');
+			return setProfileImage("/images/defaultProfilePic.png");
 		const url = await getImageFromS3(userAttributes?.picture);
 		setProfileImage(url);
 	};
