@@ -250,11 +250,12 @@ return (
 							<p className="font-light text-[.8rem]">&nbsp;/&nbsp;</p>
 							<p className="font-light text-[.8rem]">Admin Portal</p>
 							<p className="font-light text-[.8rem]">&nbsp;/&nbsp;</p>
-							<p
+							<Link 
+                href="/admin-portal/leagues"
 								className="font-light text-[.8rem]"
 							>
 								Leagues
-							</p>
+							</Link>
 							<p className="font-light text-[.8rem]">&nbsp;/&nbsp;</p>
 							<Link href={`/admin-portal/leagues/${division?.id}`} className="font-light text-[.8rem]">
 								{division?.name}
